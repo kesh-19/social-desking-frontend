@@ -1,0 +1,168 @@
+{
+    "buildings": [
+        {
+            "buildingId": "B1",
+            "noOfFloors": 2,
+            "buildingName": "DB1"
+        },
+        {
+            "buildingId": "B2",
+            "noOfFloors": 2,
+            "buildingName": "DB1"
+        },
+        {
+            "buildingId": "B3",
+            "noOfFloors": 2,
+            "buildingName": "DB1"
+        },
+        {
+            "buildingId": "B4",
+            "noOfFloors": 2,
+            "buildingName": "DB1"
+        },
+        {
+            "buildingId": "B5",
+            "noOfFloors": 2,
+            "buildingName": "DB1"
+        }
+    ],
+    "teams": [
+        {
+            "teamId": "T1",
+            "teamName": "Mavericks",
+            "division": "CBIB"
+        },
+        {
+            "teamId": "T2",
+            "teamName": "Mavericks",
+            "division": "CBIB"
+        },
+        {
+            "teamId": "T3",
+            "teamName": "Mavericks",
+            "division": "CBIB"
+        },
+        {
+            "teamId": "T4",
+            "teamName": "Mavericks",
+            "division": "CBIB"
+        },
+        {
+            "teamId": "T5",
+            "teamName": "Mavericks",
+            "division": "CBIB"
+        }
+    ],
+    "users": [
+        {
+            "teamId": "T1",
+            "userId": "U1",
+            "FName": "John",
+            "LName": "Doe",
+            "email": "john.doe@gmail.com",
+            "role": "user"
+        },
+        {
+            "teamId": "T1",
+            "userId": "U1",
+            "FName": "John",
+            "LName": "Doe",
+            "email": "john.doe@gmail.com",
+            "role": "user"
+        },
+        {
+            "teamId": "T1",
+            "userId": "U1",
+            "FName": "John",
+            "LName": "Doe",
+            "email": "john.doe@gmail.com",
+            "role": "user"
+        },
+        {
+            "teamId": "T1",
+            "userId": "U1",
+            "FName": "John",
+            "LName": "Doe",
+            "email": "john.doe@gmail.com",
+            "role": "user"
+        },
+        {
+            "teamId": "T5",
+            "userId": "U5",
+            "FName": "Jack",
+            "LName": "Hi",
+            "email": "jack.hi@gmail.com",
+            "role": "admin"
+        }
+    ],
+    "seats": [
+        {
+            "seatId": "S1",
+            "booked": true,
+            "buildingId": "B1",
+            "floorNo": 1,
+            "blocked": false 
+        },
+        {
+            "seatId": "S1",
+            "booked": true,
+            "buildingId": "B1",
+            "floorNo": 1,
+            "blocked": false 
+        },
+        {
+            "seatId": "S1",
+            "booked": true,
+            "buildingId": "B1",
+            "floorNo": 1,
+            "blocked": false 
+        },
+        {
+            "seatId": "S1",
+            "booked": true,
+            "buildingId": "B1",
+            "floorNo": 1,
+            "blocked": false 
+        },
+        {
+            "seatId": "S1",
+            "booked": true,
+            "buildingId": "B1",
+            "floorNo": 1,
+            "blocked": false 
+        },
+        {
+            "seatId": "S1",
+            "booked": true,
+            "buildingId": "B1",
+            "floorNo": 1,
+            "blocked": false 
+        }
+    ],
+    "bookings": [
+        {
+            "bookingId": "bid1",
+            "dateOfBooking": "13-7-2021",
+            "userId": "U1",
+            "seatId": "S1"
+        },
+        {
+            "bookingId": "bid1",
+            "dateOfBooking": "13-7-2021",
+            "userId": "U1",
+            "seatId": "S1"
+        },
+        {
+            "bookingId": "bid1",
+            "dateOfBooking": "13-7-2021",
+            "userId": "U1",
+            "seatId": "S1"
+        },
+        {
+            "bookingId": "bid1",
+            "dateOfBooking": "13-7-2021",
+            "userId": "U1",
+            "seatId": "S1"
+        }
+    ]
+}
