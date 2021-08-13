@@ -4,7 +4,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { useHistory } from 'react-router';
 import {
   Link,
   useRouteMatch
@@ -19,6 +18,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    color: 'white',
+    textDecoration: 'none',
   },
   navbar: {
     backgroundColor: '#0020a9',
@@ -37,7 +38,11 @@ const Navbar = () => {
             <AppBar position="static" className={classes.navbar}>
                 <Toolbar>
                 <Typography variant="h6" className={classes.title}>
-                    dbSocialDesk
+                    <Link to="/index">
+                      <div className={classes.title}>
+                        dbSocialDesk
+                      </div>
+                    </Link>
                 </Typography>
                 <Link to={`${url}/bookings`}>
                   <Button className={classes.button}>My Bookings</Button>
