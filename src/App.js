@@ -6,7 +6,7 @@ import {
   Redirect
 } from "react-router-dom";
 import SignIn from './components/SignIn';
-import Register from './components/Register';
+import Home from './components/Home';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Switch>
           <Route exact path='/' render={() => <Redirect to='/signin'/>} />
           <Route path="/signin" component={SignIn} />
-          <Route path="/register" component={Register} />
+          <Route path="/index" component={Home} />
         </Switch>
       </Router>
     </div>

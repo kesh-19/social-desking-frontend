@@ -33,6 +33,10 @@ const useLoginStyles = makeStyles((theme) => ({
     },
     logo: {
         marginBottom: '0.5rem'
+    },
+    progress: {
+      display: 'flex',
+      alignItems: 'center'
     }
   }));
 

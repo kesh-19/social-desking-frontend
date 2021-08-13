@@ -1,10 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import {Link} from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import logo from '../images/db_logo1.png';
 import useGlobalStyles from '../styles/global'
@@ -13,21 +9,24 @@ import LandingPage from './LandingPage';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Backdrop from '@material-ui/core/Backdrop';
+import { useHistory } from 'react-router';
 
 export default function SignIn() {
     const classes = useLoginStyles();
     const globalStyles = useGlobalStyles();
+    let history = useHistory()
 
     const initialValues = {
-        email: '',
-        password: '',
+        email: ''
     }
     const onSubmit = (values) => {
         setOpen(true)
         console.log(JSON.stringify(values, null, 2));
 
-        setTimeout(() => setOpen(false), 2000)
+        
+        setTimeout(() => {
+            history.push('/index')
+        }, 1000)
     }
     const formik = useFormik({initialValues, onSubmit})
     const [open, setOpen] = useState(false);
@@ -51,24 +50,8 @@ export default function SignIn() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                //autoFocus
+                autoFocus
                 {...formik.getFieldProps('email')}
-            />
-            <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                {...formik.getFieldProps('password')}
-            />
-            <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
             />
             <Button
                 type="submit"
@@ -77,26 +60,13 @@ export default function SignIn() {
                 color="primary"
                 className={classes.submit}
                 size="large"
+                disabled={open}
             >
                 Sign In
             </Button>
-            <Grid container>
-                <Grid item xs>
-                <Link to="/" className={globalStyles.primary}>
-                    Forgot password?
-                </Link>
-                </Grid>
-                <Grid item xs>
-                <Link to="/register" className={globalStyles.primary}>
-                    {"Don't have an account? Sign Up"}
-                </Link>
-                </Grid>
-            </Grid>
             </form>
+        { open && <CircularProgress className={classes.progress} />}
         </div>
-        <Backdrop className={globalStyles.backdrop} open={open} onClick={handleClose}>
-            <CircularProgress color="inherit" />
-        </Backdrop>
     </LandingPage>
   );
 }
