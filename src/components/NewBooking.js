@@ -17,7 +17,7 @@ import Button from '@material-ui/core/Button';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorIcon from '@material-ui/icons/Error';
-
+import SeatGrid from './SeatGrid';
 const NewBooking = (props) => {
     const classes = useNewBookingStyles();
     const [floor, setFloor] = useState(1);
@@ -178,7 +178,7 @@ const NewBooking = (props) => {
                                 className={classes.chip}
                             />
                         </Box>
-                        Selection grid todo
+                        <SeatGrid/>
                     </Box>
                 </Grid>
                         <Divider orientation="vertical" flexItem />
