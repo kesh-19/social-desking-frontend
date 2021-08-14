@@ -6,9 +6,8 @@ import bg from '../images/DB2.jpg';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
-        textAlign: "left",
-        margin: "1em 0",
+        flexGrow: 1,
+        maxWidth: '345px'
     },
     media: {
         height: 140,
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BookingCard = ({bookingId}) => {
+const BookingCard = ({booking}) => {
 
     const classes = useStyles()
     return (
@@ -30,15 +29,15 @@ const BookingCard = ({bookingId}) => {
             />
             <CardContent>
                 <Typography variant="h5" gutterBottom>
-                   Helo
+                   {booking.seatId}
                 </Typography>
                 <Typography variant="subtitle2" gutterBottom>
-                    Address
+                    {booking.dateOfBooking}
                 </Typography>
             </CardContent>
             <CardActions style={{ padding: "1em" }}>
                 <Button variant="contained" size="small" color="primary">
-                    {bookingId}
+                    {booking.bookingId}
                 </Button>
             </CardActions>
         </Card>
