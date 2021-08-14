@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import logo from '../images/db_logo1.png';
-import useGlobalStyles from '../styles/global'
+// import useGlobalStyles from '../styles/global'
 import useLoginStyles from '../styles/loginStyles'
 import LandingPage from './LandingPage';
 import { useFormik } from 'formik';
@@ -13,7 +13,7 @@ import { useHistory } from 'react-router';
 
 export default function SignIn() {
     const classes = useLoginStyles();
-    const globalStyles = useGlobalStyles();
+    // const globalStyles = useGlobalStyles();
     let history = useHistory()
 
     const initialValues = {
@@ -30,7 +30,7 @@ export default function SignIn() {
     }
     const formik = useFormik({initialValues, onSubmit})
     const [open, setOpen] = useState(false);
-    const handleClose = () => setOpen(false)
+    // const handleClose = () => setOpen(false)
 
   return (
     <LandingPage>

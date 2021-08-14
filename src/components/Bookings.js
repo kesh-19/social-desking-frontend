@@ -24,7 +24,7 @@ const Bookings = () => {
     
     
     const classes = useStyles();
-    const dataUrl = 'https://8000-crimson-chicken-jmc0octb.ws-us14.gitpod.io'
+    const dataUrl = 'http://localhost:8000'
 
     const [bookings, setBookings] = useState([])
     

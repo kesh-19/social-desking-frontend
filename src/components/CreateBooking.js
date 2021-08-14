@@ -16,32 +16,32 @@ const CreateBooking = () => {
 
     const dummyOfficeList = [
         {
-            id: 1,
+            id: 'B1',
             buildingName: "Yerawda",
             address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
         },
         {
-            id: 2,
+            id: 'B2',
             buildingName: "Yerawda",
             address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
         },
         {
-            id: 3,
+            id: 'B3',
             buildingName: "Yerawda",
             address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
         },
         {
-            id: 4,
+            id: 'B4',
             buildingName: "Yerawda",
             address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
         },
         {
-            id: 5,
+            id: 'B5',
             buildingName: "Yerawda",
             address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
         },
         {
-            id: 6,
+            id: 'B6',
             buildingName: "Yerawda",
             address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
         },
@@ -60,10 +60,11 @@ const CreateBooking = () => {
 
                     {
                         dummyOfficeList.map((item) => (
-                            <Grid item xs={12} sm={4} md={4}>
+                            <Grid item xs={12} sm={4} md={4} key={item.id}>
                                 <OfficeCard
                                     buildingName={item.buildingName}
                                     address={item.address}
+                                    buildingId={item.id}
                                 />
                             </Grid>
                         ))
@@ -83,10 +84,11 @@ const CreateBooking = () => {
                     alignItems="center">
                     {
                         dummyOfficeList.map((item) => (
-                            <Grid item xs={12} sm={4} md={4}>
+                            <Grid item xs={12} sm={4} md={4} key={item.id}>
                                 <OfficeCard
                                     buildingName={item.buildingName}
                                     address={item.address}
+                                    buildingId={item.id}
                                 />
                             </Grid>
                         ))
