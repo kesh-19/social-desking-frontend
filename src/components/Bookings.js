@@ -22,20 +22,59 @@ const useStyles = makeStyles((theme) => ({
 
 const Bookings = () => {
     
-    
+   
+
     const classes = useStyles();
     const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
     const userId = 1
 
-    const [bookings, setBookings] = useState([])
+    let [bookings, setBookings] = useState([])
+    
     useEffect(() => {
-        fetch(dataUrl + 'booking/' + userId)
-            .then(res => res.json())
-            .then(data => {
-                console.log("Bookings : ", data)
-                setBookings(data)})
+        
+        // fetch(dataUrl + 'booking/' + userId)
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         console.log("Bookings : ", data)
+        //         setBookings(data)})
+        setBookings([
+            [
+                {
+                    "seatId": "S1",
+                    "buildingId": "B1",
+                    "floorNo": 1
+                },
+                {
+                    "bookingId": 1,
+                    "dateOfBooking": "190201223"
+                }
+            ],
+            [
+                {
+                    "seatId": "S2",
+                    "buildingId": "B2",
+                    "floorNo": 2
+                },
+                {
+                    "bookingId": 2,
+                    "dateOfBooking": "190201224"
+                }
+            ]
+        ])
             
     }, [])
+
+    const cancelBooking = (bookingId) => {
+        // axios.delete(dataUrl + 'booking/' + bookingId)
+        //     .then(res => {
+        //         console.log(res)
+        //         console.log(res.data)
+                
+        //     })
+        setBookings(bookings.filter(booking => booking[1].bookingId !== bookingId))
+        console.log(bookings)
+        console.log("BookingId:", bookingId)
+    }
 
     return (
         <div className={classes.root}>
@@ -47,7 +86,10 @@ const Bookings = () => {
                     
                     bookings.map(booking => (
                         <Grid item xs={12} sm={6} md={4}>
-                            <BookingCard booking={booking} key={booking.userid} />
+                            <BookingCard 
+                            booking={booking}
+                            cancelBooking = {cancelBooking}
+                            key={booking.userid} />
                         </Grid>
                     ))
                 }

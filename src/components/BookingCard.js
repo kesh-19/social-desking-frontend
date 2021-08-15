@@ -17,17 +17,10 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BookingCard = ({booking}) => {
+const BookingCard = ({booking, cancelBooking}) => {
     const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
     
-    const cancelBooking = (bookingId) => {
-        axios.delete(dataUrl + 'booking/' + bookingId)
-            .then(res => {
-                console.log(res)
-                console.log(res.data)
-                
-            })
-    }
+    
     console.log("Booking Card : ", booking)
     const classes = useStyles()
     return (
@@ -51,7 +44,7 @@ const BookingCard = ({booking}) => {
                 </Typography>
             </CardContent>
             <CardActions style={{ padding: "1em"}}>
-                <Button variant="contained" size="small" color="secondary" onClick={cancelBooking(booking[1].bookingId)}>
+                <Button variant="contained" size="small" color="secondary" onClick={() => {cancelBooking(booking[1].bookingId)}}>
                    Cancel booking
                 </Button>
             </CardActions>
