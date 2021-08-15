@@ -18,6 +18,8 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorIcon from '@material-ui/icons/Error';
 import SeatGrid from './SeatGrid';
+// import Config from '../../congif.json'
+
 const NewBooking = (props) => {
     const classes = useNewBookingStyles();
     const [floor, setFloor] = useState(1);
@@ -38,7 +40,8 @@ const NewBooking = (props) => {
     useEffect(() => {
         setLoading(true)
         let buildingId = props.match.params.id
-        const dataUrl = 'http://localhost:8000'
+        // const dataUrl = 'http://localhost:8000'
+        const dataUrl = 'http://exp1spring.herokuapp.com'
 
         fetch(dataUrl + '/buildings')
             .then(res => res.json())
@@ -46,6 +49,7 @@ const NewBooking = (props) => {
                 data = data.filter(item => item.buildingId === buildingId)
                 if (data.length) data = data[0]
                 setBuilding(data)
+                console.log(data)
                 setLoading(false)
             })
     }, [props.match.params.id])
@@ -95,23 +99,6 @@ const NewBooking = (props) => {
                             />
                         </Box>
                         <Box className={classes.formControlBox}>
-                            {/* <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">Floor</InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-outlined-label"
-                                    id="demo-simple-select-outlined"
-                                    value={floor}
-                                    onChange={handleChange}
-                                    label="floor"
-                                >
-                                {
-                                    floors.map((item, index) => (
-                                        <MenuItem value={item} key={index}>Floor {item}</MenuItem>
-                                    ))
-                                }
-                                </Select>
-                            </FormControl>
-                             */}
                             <Grid container>
                                 <Grid item xs={3}>
                                     <FormControl variant="outlined" className={classes.formControl}>
@@ -205,17 +192,17 @@ const NewBooking = (props) => {
                                     </Typography>
                                     
                                     <Typography variant="h6" className={classes.bookingHeader}>
-                                        FLOOR
-                                    </Typography>
-                                    <Typography variant="overline" display="block" gutterBottom>
-                                        Floor {floor}
-                                    </Typography>
-                                    
-                                    <Typography variant="h6" className={classes.bookingHeader}>
                                         DATE
                                     </Typography>
                                     <Typography variant="overline" display="block" gutterBottom>
                                         {date.getDate()} / {date.getMonth()+1} / {date.getFullYear()}
+                                    </Typography>
+
+                                    <Typography variant="h6" className={classes.bookingHeader}>
+                                        FLOOR
+                                    </Typography>
+                                    <Typography variant="overline" display="block" gutterBottom>
+                                        Floor {floor}
                                     </Typography>
                                     
                                     <Typography variant="h6" className={classes.bookingHeader}>
@@ -240,7 +227,7 @@ const NewBooking = (props) => {
                                         !building &&
                                             <Chip
                                                 icon={<ErrorIcon />}
-                                                label="Could not fetch Building data"
+                                                label="Could not fetch Location data"
                                                 color="secondary"
                                             />
                                     }
