@@ -19,6 +19,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorIcon from '@material-ui/icons/Error';
 import SeatGrid from './SeatGrid';
 import Config from '../Config'
+import { getFloorProgress } from '../functions/helperFunctions';
 
 const NewBooking = (props) => {
     const classes = useNewBookingStyles();
@@ -30,6 +31,7 @@ const NewBooking = (props) => {
     const [image, setImage] = useState(null);
     const [seatList, setSeatList] = useState([]);
     const [selected, setSelected] = useState(0);
+    const [floorProgress, setFloorProgress] = useState(0);
 
     const onDeskClick = (deskNumber) => {
         if (!seatList[deskNumber].blocked && deskNumber + 1 !== selected) {
@@ -64,7 +66,6 @@ const NewBooking = (props) => {
                     floorBuilder.push(i)
                 }
                 setFloors(floorBuilder)
-
                 setLoading(false)
             })
     }, [props.match.params.id])
@@ -82,20 +83,18 @@ const NewBooking = (props) => {
         })
 
         fetch(`${Config.serverUrl}/desking/buildings/${1}`)
+        // fetch("http://localhost:8000/seats")
             .then(res => res.json())
             .then(data => {
                 const seatList = data.filter(item => item.floorNo === floor);
                 setSeatList(seatList);
-
+                getFloorProgress(data).then((result) => setFloorProgress(result))
             });
 
 
     }, [floor])
 
     const handleSubmit = () => {
-
-
-
         let result = {
             buildingId: building.buildingId,
             bookingFloor: floor,
@@ -157,13 +156,13 @@ const NewBooking = (props) => {
                                     <Box className={classes.progress}>
                                         <LinearProgress
                                             variant="determinate"
-                                            value={progress}
+                                            value={floorProgress[floor]}
                                             color={progress > 75 ? 'secondary' : 'primary'}
                                         />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3} className={classes.percentage}>
-                                    <p>{progress}% full</p>
+                                    <p>{floorProgress[floor]}% full</p>
                                 </Grid>
                             </Grid>
                         </Box>
@@ -244,7 +243,7 @@ const NewBooking = (props) => {
                                     Desk
                                 </Typography>
                                 <Typography variant="overline" display="block" gutterBottom>
-                                    28
+                                    {selected}
                                 </Typography>
                             </Box>
 
