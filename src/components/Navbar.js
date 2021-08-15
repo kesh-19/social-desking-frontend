@@ -70,7 +70,7 @@ const Navbar = () => {
 
     return ( 
         <div className={classes.root}>
-            <AppBar position="static" className={classes.navbar}>
+            <AppBar position="fixed" className={classes.navbar}>
                 <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     <Link to="/index">

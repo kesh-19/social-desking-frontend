@@ -18,44 +18,59 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorIcon from '@material-ui/icons/Error';
 import SeatGrid from './SeatGrid';
-// import Config from '../../congif.json'
+import Config from '../Config'
 
 const NewBooking = (props) => {
     const classes = useNewBookingStyles();
     const [floor, setFloor] = useState(1);
+    const [floors, setFloors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState(false);
     const [date, setDate] = useState(new Date('2021-08-18T21:11:54'));
     const [desk, setDesk] = useState(17);
     const [image, setImage] = useState(null);
-    let floors = [1,2,3]
     let progress = 76
 
     const handleChange = (event) => {
         setFloor(event.target.value);
     };
 
-    console.log(props);
+    // console.log(props);
     
     useEffect(() => {
         setLoading(true)
-        let buildingId = props.match.params.id
-        // const dataUrl = 'http://localhost:8000'
-        const dataUrl = 'http://exp1spring.herokuapp.com'
+        let buildingId = 6
 
-        fetch(dataUrl + '/buildings')
+        fetch(Config.serverUrl + '/desking/buildings/')
             .then(res => res.json())
             .then(data => {
+
+                // setBuilding
                 data = data.filter(item => item.buildingId === buildingId)
                 if (data.length) data = data[0]
                 setBuilding(data)
                 console.log(data)
+
+                //set Number of Floors
+                let floorBuilder = []
+                for (let i=1; i<=data.noOfFloor; i++) {
+                    floorBuilder.push(i)
+                }
+                setFloors(floorBuilder)
+
                 setLoading(false)
             })
     }, [props.match.params.id])
 
     useEffect(() => {
-        import('../images/floor'+floor+'.jpg').then(image => {
+        let floorId = floor
+        if (floor > 3) 
+            floorId = floor % 3
+            if (floorId === 0)
+                floorId = 3
+
+        console.log(floorId);
+        import('../images/floor'+floorId+'.jpg').then(image => {
             setImage(image.default)
         })
     }, [floor])
