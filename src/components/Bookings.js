@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
@@ -23,14 +24,21 @@ const Bookings = () => {
     
     
     const classes = useStyles();
-    const dataUrl = 'https://8000-white-gibbon-p4qhs88b.ws-us14.gitpod.io'
+    const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
+    const userId = 1
 
     const [bookings, setBookings] = useState([])
     
     useEffect(() => {
-        fetch(dataUrl + '/bookings')
+        axios.get(dataUrl + 'booking/' + userId, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                
+            }
+        })
             .then(res => res.json())
             .then(data => setBookings(data))
+            console.log(bookings)
     }, [])
 
     return (
