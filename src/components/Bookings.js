@@ -22,8 +22,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Bookings = () => {
     
-   
-
     const classes = useStyles();
     const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
     const userId = 1
@@ -32,45 +30,45 @@ const Bookings = () => {
     
     useEffect(() => {
         
-        // fetch(dataUrl + 'booking/' + userId)
-        //     .then(res => res.json())
-        //     .then(data => {
-        //         console.log("Bookings : ", data)
-        //         setBookings(data)})
-        setBookings([
-            [
-                {
-                    "seatId": "S1",
-                    "buildingId": "B1",
-                    "floorNo": 1
-                },
-                {
-                    "bookingId": 1,
-                    "dateOfBooking": "190201223"
-                }
-            ],
-            [
-                {
-                    "seatId": "S2",
-                    "buildingId": "B2",
-                    "floorNo": 2
-                },
-                {
-                    "bookingId": 2,
-                    "dateOfBooking": "190201224"
-                }
-            ]
-        ])
+        fetch(dataUrl + 'booking/' + userId)
+            .then(res => res.json())
+            .then(data => {
+                console.log("Bookings : ", data)
+                setBookings(data)})
+    //     setBookings([
+    //         [
+    //             {
+    //                 "seatId": "S1",
+    //                 "buildingId": "B1",
+    //                 "floorNo": 1
+    //             },
+    //             {
+    //                 "bookingId": 1,
+    //                 "dateOfBooking": "190201223"
+    //             }
+    //         ],
+    //         [
+    //             {
+    //                 "seatId": "S2",
+    //                 "buildingId": "B2",
+    //                 "floorNo": 2
+    //             },
+    //             {
+    //                 "bookingId": 2,
+    //                 "dateOfBooking": "190201224"
+    //             }
+    //         ]
+    //     ])
             
-    }, [])
+     }, [])
 
     const cancelBooking = (bookingId) => {
-        // axios.delete(dataUrl + 'booking/' + bookingId)
-        //     .then(res => {
-        //         console.log(res)
-        //         console.log(res.data)
+        axios.delete(dataUrl + 'booking/' + bookingId)
+            .then(res => {
+                console.log(res)
+                console.log(res.data)
                 
-        //     })
+            })
         setBookings(bookings.filter(booking => booking[1].bookingId !== bookingId))
         console.log(bookings)
         console.log("BookingId:", bookingId)
