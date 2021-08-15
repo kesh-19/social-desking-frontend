@@ -27,16 +27,24 @@ const NewBooking = (props) => {
     const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState(false);
     const [date, setDate] = useState(new Date('2021-08-18T21:11:54'));
-    const [desk, setDesk] = useState(17);
     const [image, setImage] = useState(null);
+    const [seatList, setSeatList] = useState([]);
+    const [selected, setSelected] = useState(0);
+
+    const onDeskClick = (deskNumber) => {
+        if (!seatList[deskNumber].blocked && deskNumber + 1 !== selected) {
+            setSelected(deskNumber + 1);
+        } else if (deskNumber + 1 === selected) {
+            setSelected(0);
+        }
+    }
+
     let progress = 76
 
     const handleChange = (event) => {
         setFloor(event.target.value);
     };
 
-    // console.log(props);
-    
     useEffect(() => {
         setLoading(true)
         let buildingId = 6
@@ -49,11 +57,10 @@ const NewBooking = (props) => {
                 data = data.filter(item => item.buildingId === buildingId)
                 if (data.length) data = data[0]
                 setBuilding(data)
-                console.log(data)
 
                 //set Number of Floors
                 let floorBuilder = []
-                for (let i=1; i<=data.noOfFloor; i++) {
+                for (let i = 1; i <= data.noOfFloor; i++) {
                     floorBuilder.push(i)
                 }
                 setFloors(floorBuilder)
@@ -62,31 +69,44 @@ const NewBooking = (props) => {
             })
     }, [props.match.params.id])
 
+
     useEffect(() => {
         let floorId = floor
-        if (floor > 3) 
+        if (floor > 3)
             floorId = floor % 3
-            if (floorId === 0)
-                floorId = 3
+        if (floorId === 0)
+            floorId = 3
 
-        console.log(floorId);
-        import('../images/floor'+floorId+'.jpg').then(image => {
+        import('../images/floor' + floorId + '.jpg').then(image => {
             setImage(image.default)
         })
+
+        fetch(`${Config.serverUrl}/desking/buildings/${1}`)
+            .then(res => res.json())
+            .then(data => {
+                const seatList = data.filter(item => item.floorNo === floor);
+                setSeatList(seatList);
+
+            });
+
+
     }, [floor])
 
     const handleSubmit = () => {
+
+
+
         let result = {
             buildingId: building.buildingId,
             bookingFloor: floor,
             bookingDate: date,
-            bookingDesk: desk
+            desk: seatList[selected].seatId,
         }
         result = JSON.stringify(result);
         alert(result)
     }
 
-    return ( 
+    return (
         <div className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -102,14 +122,14 @@ const NewBooking = (props) => {
                         )
                     }
                 </Grid>
-                
+
                 <Grid item xs={12} md={4}>
                     <Box className={classes.paper}>
                         <Box className={classes.listChip}>
                             <Chip
                                 color="primary"
-                                label="Select and View Floor" 
-                                variant="outlined" 
+                                label="Select and View Floor"
+                                variant="outlined"
                                 className={classes.chip}
                             />
                         </Box>
@@ -125,21 +145,21 @@ const NewBooking = (props) => {
                                             onChange={handleChange}
                                             label="floor"
                                         >
-                                        {
-                                            floors.map((item, index) => (
-                                                <MenuItem value={item} key={index}>Floor {item}</MenuItem>
-                                            ))
-                                        }
+                                            {
+                                                floors.map((item, index) => (
+                                                    <MenuItem value={item} key={index}>Floor {item}</MenuItem>
+                                                ))
+                                            }
                                         </Select>
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Box className={classes.progress}>
-                                        <LinearProgress 
-                                            variant="determinate" 
+                                        <LinearProgress
+                                            variant="determinate"
                                             value={progress}
-                                            color={progress > 75 ? 'secondary' : 'primary'} 
-                                        /> 
+                                            color={progress > 75 ? 'secondary' : 'primary'}
+                                        />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3} className={classes.percentage}>
@@ -150,7 +170,7 @@ const NewBooking = (props) => {
                     </Box>
                     <Box className={classes.image}>
                         <Zoom>
-                            <img src={image} alt={"floor"+floor} height="200" width="370" />
+                            <img src={image} alt={"floor" + floor} height="200" width="370" />
                         </Zoom>
                     </Box>
                     <Box className={classes.image}>
@@ -164,8 +184,8 @@ const NewBooking = (props) => {
                         <Box className={classes.listChip}>
                             <Chip
                                 color="primary"
-                                label="Select Date" 
-                                variant="outlined" 
+                                label="Select Date"
+                                variant="outlined"
                                 className={classes.chip}
                             />
                         </Box>
@@ -175,84 +195,84 @@ const NewBooking = (props) => {
                         <Box className={classes.listChip}>
                             <Chip
                                 color="primary"
-                                label="Select Desk" 
-                                variant="outlined" 
+                                label="Select Desk"
+                                variant="outlined"
                                 className={classes.chip}
                             />
                         </Box>
-                        <SeatGrid/>
+                        <SeatGrid seatList={seatList} onDeskClick={onDeskClick} selected={selected}/>
                     </Box>
                 </Grid>
-                        <Divider orientation="vertical" flexItem />
+                <Divider orientation="vertical" flexItem />
                 {
                     date &&
-                        <Grid item xs={12} md={3}>
-                            <Box className={classes.paper}>
-                                <Box className={classes.listChip}>
-                                    <Chip
-                                        color="primary"
-                                        label="Booking Details" 
-                                        variant="outlined" 
-                                        className={classes.chip}
-                                    />
-                                </Box>
-                                
-                                <Box>
-                                    <Typography variant="h6" className={classes.bookingHeader}>
-                                        LOCATION
-                                    </Typography>
-                                    {/* <Divider variant="inset"  /> */}
-                                    <Typography variant="overline" display="block" gutterBottom>
-                                        {building.buildingName}
-                                    </Typography>
-                                    
-                                    <Typography variant="h6" className={classes.bookingHeader}>
-                                        DATE
-                                    </Typography>
-                                    <Typography variant="overline" display="block" gutterBottom>
-                                        {date.getDate()} / {date.getMonth()+1} / {date.getFullYear()}
-                                    </Typography>
-
-                                    <Typography variant="h6" className={classes.bookingHeader}>
-                                        FLOOR
-                                    </Typography>
-                                    <Typography variant="overline" display="block" gutterBottom>
-                                        Floor {floor}
-                                    </Typography>
-                                    
-                                    <Typography variant="h6" className={classes.bookingHeader}>
-                                        Desk
-                                    </Typography>
-                                    <Typography variant="overline" display="block" gutterBottom>
-                                        28
-                                    </Typography>
-                                </Box>
-
-                                <Box>
-                                    <Button 
-                                        variant="contained" 
-                                        className={classes.confirmButton} 
-                                        onClick={handleSubmit}
-                                        disabled={!building}
-                                    >
-                                        <CheckCircleOutlineIcon /> &nbsp;
-                                         Confirm Booking
-                                    </Button>
-                                    {
-                                        !building &&
-                                            <Chip
-                                                icon={<ErrorIcon />}
-                                                label="Could not fetch Location data"
-                                                color="secondary"
-                                            />
-                                    }
-                                </Box>
+                    <Grid item xs={12} md={3}>
+                        <Box className={classes.paper}>
+                            <Box className={classes.listChip}>
+                                <Chip
+                                    color="primary"
+                                    label="Booking Details"
+                                    variant="outlined"
+                                    className={classes.chip}
+                                />
                             </Box>
-                        </Grid>
+
+                            <Box>
+                                <Typography variant="h6" className={classes.bookingHeader}>
+                                    LOCATION
+                                </Typography>
+                                {/* <Divider variant="inset"  /> */}
+                                <Typography variant="overline" display="block" gutterBottom>
+                                    {building.buildingName}
+                                </Typography>
+
+                                <Typography variant="h6" className={classes.bookingHeader}>
+                                    DATE
+                                </Typography>
+                                <Typography variant="overline" display="block" gutterBottom>
+                                    {date.getDate()} / {date.getMonth() + 1} / {date.getFullYear()}
+                                </Typography>
+
+                                <Typography variant="h6" className={classes.bookingHeader}>
+                                    FLOOR
+                                </Typography>
+                                <Typography variant="overline" display="block" gutterBottom>
+                                    Floor {floor}
+                                </Typography>
+
+                                <Typography variant="h6" className={classes.bookingHeader}>
+                                    Desk
+                                </Typography>
+                                <Typography variant="overline" display="block" gutterBottom>
+                                    28
+                                </Typography>
+                            </Box>
+
+                            <Box>
+                                <Button
+                                    variant="contained"
+                                    className={classes.confirmButton}
+                                    onClick={handleSubmit}
+                                    disabled={!building}
+                                >
+                                    <CheckCircleOutlineIcon /> &nbsp;
+                                    Confirm Booking
+                                </Button>
+                                {
+                                    !building &&
+                                    <Chip
+                                        icon={<ErrorIcon />}
+                                        label="Could not fetch Location data"
+                                        color="secondary"
+                                    />
+                                }
+                            </Box>
+                        </Box>
+                    </Grid>
                 }
-                </Grid>
-            </div>
-     );
+            </Grid>
+        </div>
+    );
 }
- 
+
 export default NewBooking;

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import OfficeCard from './OfficeCard';
 import { CircularProgress, Typography } from '@material-ui/core';
+import Config from '../Config';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,9 +18,10 @@ const CreateBooking = () => {
     const [loading, setLoading] = useState(false);
     const [buildingList, setBuildingList] = useState([]);
 
+    
     const getBuildingData = async () => {
         setLoading(true);
-        const res = await fetch('https://exp1spring.herokuapp.com/desking/buildings');
+        const res = await fetch(`${Config.serverUrl}/desking/buildings`);
         const buildings = await res.json();
         setBuildingList(buildings);
         setLoading(false);
