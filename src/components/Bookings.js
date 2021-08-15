@@ -28,17 +28,13 @@ const Bookings = () => {
     const userId = 1
 
     const [bookings, setBookings] = useState([])
-    
     useEffect(() => {
-        axios.get(dataUrl + 'booking/' + userId, {
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                
-            }
-        })
+        fetch(dataUrl + 'booking/' + userId)
             .then(res => res.json())
-            .then(data => setBookings(data))
-            console.log(bookings)
+            .then(data => {
+                console.log("Bookings : ", data)
+                setBookings(data)})
+            
     }, [])
 
     return (
@@ -48,6 +44,7 @@ const Bookings = () => {
                     justifyContent="flex-start"
                     alignItems="center">
                 { 
+                    
                     bookings.map(booking => (
                         <Grid item xs={12} sm={6} md={4}>
                             <BookingCard booking={booking} key={booking.userid} />
