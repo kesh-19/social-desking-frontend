@@ -25,12 +25,12 @@ const Bookings = () => {
     const classes = useStyles();
     const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
     const userId = 1
-
+    localStorage.setItem('userId', userId)
     let [bookings, setBookings] = useState([])
     
     useEffect(() => {
         
-        fetch(dataUrl + 'booking/' + userId)
+        fetch(dataUrl + 'booking/' + localStorage.getItem('userId'))
             .then(res => res.json())
             .then(data => {
                 console.log("Bookings : ", data)
