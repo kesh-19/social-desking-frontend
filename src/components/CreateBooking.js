@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const CreateBooking = () => {
+const CreateBooking = (props) => {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ const CreateBooking = () => {
 
     useEffect(() => {
         getBuildingData();
-        handleToastClick()
+        if (props.history.location.byLogin) handleToastClick()
     }, []);
 
     return (

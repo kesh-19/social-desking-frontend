@@ -43,7 +43,10 @@ export default function SignIn() {
               if (user) {
                 setError(false)
                 window.localStorage.setItem('user', JSON.stringify(user))
-                history.push('/index')
+                history.push({
+                    pathname: '/index',
+                    byLogin: true
+                })
               } else {
                 setError("No user found")
               }
@@ -99,7 +102,7 @@ export default function SignIn() {
                 />
         }
         </div>
-        {/* user1gmail.com */}
+        user1gmail.com
     </LandingPage>
   );
 }
