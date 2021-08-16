@@ -62,7 +62,7 @@ const Navbar = () => {
     const [user, setUser] = React.useState({ fName: '', lName: ''});
     let { url } = useRouteMatch();
     let localStorage = window.localStorage
-    
+    const userType = JSON.parse(localStorage.getItem('user')).role
     const handleClick = (event) => {
       setMenuOpen(event.currentTarget);
     };
@@ -76,8 +76,7 @@ const Navbar = () => {
       setUser(JSON.parse(localStorage.getItem('user')))
     }, [localStorage])
 
-    // localStorage.setItem('userType', 'admin')
-    localStorage.setItem('userType', 'user')
+    
     return ( 
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navbar}>
@@ -89,8 +88,8 @@ const Navbar = () => {
                       </div>
                     </Link>
                 </Typography>
-                <Link to={ checkRoute() ? '/index' : (localStorage.getItem('userType') === 'user' ? `${url}/bookings` : `${url}/admin`)}>
-                  <Button className={classes.button}>{ checkRoute() ? 'Go back' : (localStorage.getItem('userType') === 'user' ? 'My bookings' : 'All bookings')}</Button>
+                <Link to={ checkRoute() ? '/index' : (userType === 'user' ? `${url}/bookings` : `${url}/admin`)}>
+                  <Button className={classes.button}>{ checkRoute() ? 'Go back' : (userType === 'user' ? 'My bookings' : 'All bookings')}</Button>
                 </Link>
                 
                 {

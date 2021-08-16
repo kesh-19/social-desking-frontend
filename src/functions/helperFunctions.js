@@ -1,7 +1,6 @@
 export const getFloorProgress = (seats) => {
     return new Promise((resolve, reject) => {
         let result = {}
-        console.log(seats);
 
         seats.forEach(seat => {
             

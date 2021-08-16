@@ -6,7 +6,13 @@ import db_desk_muted from '../images/db_desk_muted.png'
 import { Box } from '@material-ui/core';
 
 
-function SeatGrid({ seatList, onDeskClick, selected }) {
+function SeatGrid({ seatList, onDeskClick, selected, bookedSeats }) {
+
+    const checkIfBooked = (seat) => {        
+        const { seatId } = seat;
+        const filterSeats = bookedSeats.filter(item => item.seatId === seatId);
+        return !!(filterSeats.length >= 1)
+    }
 
     if (seatList.length < 1) {
         return (<Box>
@@ -25,13 +31,12 @@ function SeatGrid({ seatList, onDeskClick, selected }) {
 
             {
                 seatList.map((item, idx) => {
-                    if (item.booked) {
+                    if (checkIfBooked(item)) {
                         return (
                             <div
                                 key={item.seatId}
                                 onClick={() => onDeskClick(idx)}
                                 style={{
-                                    cursor: "pointer",
                                     margin: "0.5em"
                                 }}>
                                 <img src={db_desk_red} alt="desk" style={{ height: 32, width: 32 }} />

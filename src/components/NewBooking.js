@@ -35,12 +35,16 @@ const NewBooking = (props) => {
     const [building, setBuilding] = useState({});
     const [date, setDate] = useState(new Date());
     const [image, setImage] = useState(null);
-    const [seatList, setSeatList] = useState([]);
-    const [selected, setSelected] = useState(0);
     const [floorProgress, setFloorProgress] = useState(0);
+
+    const [seatList, setSeatList] = useState([]);
+    const [bookedSeats, setBookedSeats] = useState([]);
+    const [selected, setSelected] = useState(0);
 
     const [error, setError] = useState("");
     const [isError, setIsError] = useState(false);
+
+
 
     const onDeskClick = (deskNumber) => {
         if (!seatList[deskNumber].blocked && deskNumber + 1 !== selected) {
@@ -84,6 +88,7 @@ const NewBooking = (props) => {
 
 
     useEffect(() => {
+
         let floorId = floor
         if (floor > 3)
             floorId = floor % 3
@@ -103,7 +108,20 @@ const NewBooking = (props) => {
             });
 
 
+
     }, [floor, props.match.params.id])
+
+    useEffect(() => {        
+        setSelected(0);
+        let buildingId = parseInt(props.match.params.id);
+        const strDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
+        fetch(`${Config.serverUrl}/desking/seatsbooked/${strDate}`)
+            .then(res => res.json())
+            .then(data => {      
+                const resSeats = data.filter((item) => item && item.floorNo === floor && item.buildingId === buildingId);
+                setBookedSeats(resSeats);
+            });
+    }, [date, props.match.params.id, floor])
 
 
 
@@ -191,7 +209,7 @@ const NewBooking = (props) => {
                                     <Box className={classes.progress}>
                                         <LinearProgress
                                             variant="determinate"
-                                            value={floorProgress[floor]}
+                                            value={floorProgress[floor] ? floorProgress[floor] : 0}
                                             color={floorProgress > 75 ? 'secondary' : 'primary'}
                                         />
                                     </Box>
@@ -234,7 +252,7 @@ const NewBooking = (props) => {
                                 className={classes.chip}
                             />
                         </Box>
-                        <SeatGrid seatList={seatList} onDeskClick={onDeskClick} selected={selected} />
+                        <SeatGrid seatList={seatList} onDeskClick={onDeskClick} selected={selected} bookedSeats={bookedSeats} />
                     </Box>
                 </Grid>
                 <Divider orientation="vertical" flexItem />
