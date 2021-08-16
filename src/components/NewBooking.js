@@ -22,8 +22,11 @@ import Config from '../Config'
 import { getFloorProgress } from '../functions/helperFunctions';
 import axios from 'axios';
 import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 
 const NewBooking = (props) => {
+
+    let history = useHistory();
 
     const classes = useNewBookingStyles();
     const [floor, setFloor] = useState(1);
