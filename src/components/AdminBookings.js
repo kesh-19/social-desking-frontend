@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid, 
+  GridToolbarContainer,
+  GridToolbarExport, } from '@material-ui/data-grid';
 
 import Config from '../Config'
 const useStyles = makeStyles({
@@ -61,6 +56,12 @@ const columns = [
 ];
 
 const AdminBookings = () => {
+
+  const CustomToolbar = () => {
+    return    (<GridToolbarContainer>
+    <GridToolbarExport />
+  </GridToolbarContainer>)
+  }
   const classes = useStyles();
   const dataUrl = `${Config.serverUrl}/desking/booking/alldetails`
   const [allBookings, setAllBookings] = useState([])
@@ -79,6 +80,7 @@ const AdminBookings = () => {
 
   return (
     <div style={{ height: 400, width: '100%' }}>
+      
       <DataGrid
         rows={allBookings}
         columns={columns}
@@ -86,6 +88,9 @@ const AdminBookings = () => {
         rowsPerPageOptions={[5]}
         checkboxSelection
         disableSelectionOnClick
+        components={{
+          Toolbar: CustomToolbar,
+        }}
       />
     </div>
   );
