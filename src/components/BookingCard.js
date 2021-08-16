@@ -17,11 +17,8 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BookingCard = ({booking, cancelBooking}) => {
-    const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
+const BookingCard = ({booking, old, cancelBooking}) => {
     
-    
-    console.log("Booking Card : ", booking)
     const classes = useStyles()
     return (
         <Card className={classes.root}>
@@ -31,7 +28,7 @@ const BookingCard = ({booking, cancelBooking}) => {
                    Seat No : {booking[0].seatId}
                 </Typography>
                 <Typography variant="subtitle2" gutterBottom>
-                    Date of reservation : {booking[1].dateOfBooking}
+                    Date of reservation : {new Date(booking[1].dateOfBooking).toDateString()}
                 </Typography>
                 <Typography variant="subtitle2" gutterBottom>
                         Booking ID : {booking[1].bookingId}
@@ -44,7 +41,12 @@ const BookingCard = ({booking, cancelBooking}) => {
                 </Typography>
             </CardContent>
             <CardActions style={{ padding: "1em"}}>
-                <Button variant="contained" size="small" color="secondary" onClick={() => {cancelBooking(booking[1].bookingId)}}>
+                <Button 
+                    variant="contained" 
+                    disabled={old ? true : false}
+                    size="small" 
+                    color="secondary" 
+                    onClick={() => {cancelBooking(booking[1].bookingId)}}>
                    Cancel booking
                 </Button>
             </CardActions>
