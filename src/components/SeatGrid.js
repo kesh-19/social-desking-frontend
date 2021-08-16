@@ -3,9 +3,16 @@ import db_desk_normal from '../images/db_office.png';
 import db_desk_red from '../images/db_desk_red.png';
 import db_desk_green from '../images/db_desk_green.png';
 import db_desk_muted from '../images/db_desk_muted.png'
+import { Box } from '@material-ui/core';
 
 
-function SeatGrid({ seatList, onDeskClick, selected }) {    
+function SeatGrid({ seatList, onDeskClick, selected }) {
+
+    if (seatList.length < 1) {
+        return (<Box>
+            <p>No seats available</p>
+        </Box>);
+    }
 
     return (
         <div style={{
@@ -21,6 +28,7 @@ function SeatGrid({ seatList, onDeskClick, selected }) {
                     if (item.booked) {
                         return (
                             <div
+                                key={item.seatId}
                                 onClick={() => onDeskClick(idx)}
                                 style={{
                                     cursor: "pointer",
@@ -33,6 +41,7 @@ function SeatGrid({ seatList, onDeskClick, selected }) {
                     } else if (idx + 1 === selected) {
                         return (
                             <div
+                                key={item.seatId}
                                 onClick={() => onDeskClick(idx)}
                                 style={{
                                     cursor: "pointer",
@@ -45,6 +54,7 @@ function SeatGrid({ seatList, onDeskClick, selected }) {
                     } else if (item.blocked) {
                         return (
                             <div
+                                key={item.seatId}
                                 onClick={() => onDeskClick(idx)}
                                 style={{
                                     margin: "0.5em"
@@ -56,6 +66,7 @@ function SeatGrid({ seatList, onDeskClick, selected }) {
                     } else {
                         return (
                             <div
+                                key={item.seatId}
                                 onClick={() => onDeskClick(idx)}
                                 style={{
                                     cursor: "pointer",

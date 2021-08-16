@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const OfficeCard = ({buildingName, buildingId}) => {
+const OfficeCard = ({ buildingName, buildingId }) => {
 
     const classes = useStyles();
     let { url } = useRouteMatch();
@@ -38,10 +38,12 @@ const OfficeCard = ({buildingName, buildingId}) => {
                 </Typography>
             </CardContent>
             <CardActions style={{ padding: "1em" }}>
-                <Link to={{
-                    pathname: `${url}/${buildingId}`,
-                    buildingName
-                }}>
+                <Link
+                    style={{ textDecoration: "none" }}
+                    to={{
+                        pathname: `${url}/${buildingId}`,
+                        buildingName
+                    }}>
                     <Button variant="contained" size="small" color="primary">
                         Book a Seat
                     </Button>

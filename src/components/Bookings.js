@@ -31,15 +31,15 @@ const Bookings = () => {
     
     const classes = useStyles();
     const dataUrl = `${Config.serverUrl}/desking/booking/`
-    const userId = 1
-    localStorage.setItem('userId', userId)
+    const userId = JSON.parse(window.localStorage.getItem('user')).userId
+
     let [bookings, setBookings] = useState([])
     let [oldBookings, getOldBookings] = useState([])
     let [showOldBookings, setOldBookings] = useState(false)
     
     useEffect(() => {
         
-        fetch(dataUrl + localStorage.getItem('userId'))
+        fetch(dataUrl + userId)
             .then(res => res.json())
             .then(allBookings => {
                 let upcomingBookings = allBookings

@@ -20,18 +20,27 @@ import ErrorIcon from '@material-ui/icons/Error';
 import SeatGrid from './SeatGrid';
 import Config from '../Config'
 import { getFloorProgress } from '../functions/helperFunctions';
+import axios from 'axios';
+import moment from 'moment';
+import { useHistory } from 'react-router-dom';
 
 const NewBooking = (props) => {
+
+    let history = useHistory();
+
     const classes = useNewBookingStyles();
     const [floor, setFloor] = useState(1);
     const [floors, setFloors] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [building, setBuilding] = useState(false);
+    const [building, setBuilding] = useState({});
     const [date, setDate] = useState(new Date('2021-08-18T21:11:54'));
     const [image, setImage] = useState(null);
     const [seatList, setSeatList] = useState([]);
     const [selected, setSelected] = useState(0);
     const [floorProgress, setFloorProgress] = useState(0);
+
+    const [error, setError] = useState("");
+    const [isError, setIsError] = useState(false);
 
     const onDeskClick = (deskNumber) => {
         if (!seatList[deskNumber].blocked && deskNumber + 1 !== selected) {
@@ -41,29 +50,26 @@ const NewBooking = (props) => {
         }
     }
 
-    let progress = 76
-
     const handleChange = (event) => {
         setFloor(event.target.value);
     };
 
     useEffect(() => {
         setLoading(true)
-        let buildingId = 6
+        let buildingId = parseInt(props.match.params.id);
 
         fetch(Config.serverUrl + '/desking/buildings/')
             .then(res => res.json())
             .then(data => {
 
                 // setBuilding
-                data = data.filter(item => item.buildingId === buildingId)
-                if (data.length) data = data[0]
-                setBuilding(data)
+                const res = data.filter(item => item.buildingId === buildingId);
+                setBuilding(res[0]);
 
                 //set Number of Floors
                 let floorBuilder = []
-                for (let i = 1; i <= data.noOfFloor; i++) {
-                    floorBuilder.push(i)
+                for (let i = 1; i <= res[0].noOfFloor; i++) {
+                    floorBuilder.push(i);
                 }
                 setFloors(floorBuilder)
                 setLoading(false)
@@ -82,8 +88,7 @@ const NewBooking = (props) => {
             setImage(image.default)
         })
 
-        fetch(`${Config.serverUrl}/desking/buildings/${1}`)
-        // fetch("http://localhost:8000/seats")
+        fetch(`${Config.serverUrl}/desking/buildings/${parseInt(props.match.params.id)}`)
             .then(res => res.json())
             .then(data => {
                 const seatList = data.filter(item => item.floorNo === floor);
@@ -92,17 +97,41 @@ const NewBooking = (props) => {
             });
 
 
-    }, [floor])
+    }, [floor, props.match.params.id])
 
-    const handleSubmit = () => {
-        let result = {
-            buildingId: building.buildingId,
-            bookingFloor: floor,
-            bookingDate: date,
-            desk: seatList[selected].seatId,
+
+
+    const handleSubmit = async () => {
+
+        const user = JSON.parse(window.localStorage.getItem("user"));
+
+        if (moment().diff(date, 'days') > -1) {
+            setIsError(true);
+            setError("Date cannot be current date or past date");
+            return;
+        } else if (selected === 0) {
+            setIsError(true);
+            setError("Please Select a seat");
+            return;
+        } else if (typeof user === "undefined") {
+            setIsError(true);
+            setError("User not authenticated >:(");
+            return;
         }
-        result = JSON.stringify(result);
-        alert(result)
+
+        let result = {
+            dateOfBooking: date,
+            seatID: seatList[selected-1].seatId,
+            userID: user.userId
+        }
+        console.log(result)
+        try {
+            await axios.post(`${Config.serverUrl}/desking/booking/create`, result);
+            history.push("/index/bookings");
+        } catch (err) {
+            setIsError(true);
+            setError("There was an error");
+        }
     }
 
     return (
@@ -157,7 +186,7 @@ const NewBooking = (props) => {
                                         <LinearProgress
                                             variant="determinate"
                                             value={floorProgress[floor]}
-                                            color={progress > 75 ? 'secondary' : 'primary'}
+                                            color={floorProgress > 75 ? 'secondary' : 'primary'}
                                         />
                                     </Box>
                                 </Grid>
@@ -199,7 +228,7 @@ const NewBooking = (props) => {
                                 className={classes.chip}
                             />
                         </Box>
-                        <SeatGrid seatList={seatList} onDeskClick={onDeskClick} selected={selected}/>
+                        <SeatGrid seatList={seatList} onDeskClick={onDeskClick} selected={selected} />
                     </Box>
                 </Grid>
                 <Divider orientation="vertical" flexItem />
@@ -262,6 +291,14 @@ const NewBooking = (props) => {
                                     <Chip
                                         icon={<ErrorIcon />}
                                         label="Could not fetch Location data"
+                                        color="secondary"
+                                    />
+                                }
+                                {
+                                    isError &&
+                                    <Chip
+                                        icon={<ErrorIcon />}
+                                        label={error}
                                         color="secondary"
                                     />
                                 }
