@@ -106,6 +106,7 @@ const Bookings = () => {
                     justifyContent="flex-start"
                     alignItems="center">
                 { 
+                    bookings.length > 0 ? 
                     
                     bookings.map(booking => (
                         <Grid item xs={12} sm={6} md={4}>
@@ -115,7 +116,7 @@ const Bookings = () => {
                             cancelBooking = {cancelBooking}
                             key={booking.userid} />
                         </Grid>
-                    ))
+                    )) : <div>There are no bookings</div>
                 }
                 </Grid>
                 <div className={classes.button}>
@@ -137,7 +138,7 @@ const Bookings = () => {
                     justifyContent="flex-start"
                     alignItems="center">
                 { 
-                    
+                    oldBookings.length > 0 ?
                     oldBookings.map(booking => (
                         <Grid item xs={12} sm={6} md={4}>
                             <BookingCard 
@@ -146,7 +147,7 @@ const Bookings = () => {
                             cancelBooking = {cancelBooking}
                             key={booking.userid} />
                         </Grid>
-                    ))
+                    )) : <div>No old bookings found</div>
                 }
                 </Grid>
                 }
