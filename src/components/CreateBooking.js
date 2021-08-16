@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import OfficeCard from './OfficeCard';
-import { Typography } from '@material-ui/core';
+import { CircularProgress, Typography } from '@material-ui/core';
+import Config from '../Config';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -14,88 +15,54 @@ const useStyles = makeStyles((theme) => ({
 const CreateBooking = () => {
     const classes = useStyles();
 
-    const dummyOfficeList = [
-        {
-            id: 'B1',
-            buildingName: "Yerawda",
-            address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
-        },
-        {
-            id: 'B2',
-            buildingName: "Yerawda",
-            address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
-        },
-        {
-            id: 'B3',
-            buildingName: "Yerawda",
-            address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
-        },
-        {
-            id: 'B4',
-            buildingName: "Yerawda",
-            address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
-        },
-        {
-            id: 'B5',
-            buildingName: "Yerawda",
-            address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
-        },
-        {
-            id: 'B6',
-            buildingName: "Yerawda",
-            address: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur",
-        },
-    ];
+    const [loading, setLoading] = useState(false);
+    const [buildingList, setBuildingList] = useState([]);
+
+    
+    const getBuildingData = async () => {
+        setLoading(true);
+        const res = await fetch(`${Config.serverUrl}/desking/buildings`);
+        const buildings = await res.json();
+        setBuildingList(buildings);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getBuildingData();
+    }, []);
 
     return (
         <>
-            <Typography variant="h4" gutterBottom>
-                Recommended
-            </Typography>
-            <div className={classes.root}>
-                <Grid
-                    container
-                    justifyContent="flex-start"
-                    alignItems="center">
-
-                    {
-                        dummyOfficeList.map((item) => (
-                            <Grid item xs={12} sm={4} md={4} key={item.id}>
-                                <OfficeCard
-                                    buildingName={item.buildingName}
-                                    address={item.address}
-                                    buildingId={item.id}
-                                />
-                            </Grid>
-                        ))
-                    }
-
-                </Grid>
-            </div>
-            <br />
-            <br />
-            <Typography variant="h4" gutterBottom>
-                All Buildings
-            </Typography>
-            <div className={classes.root}>
-                <Grid
-                    container
-                    justifyContent="flex-start"
-                    alignItems="center">
-                    {
-                        dummyOfficeList.map((item) => (
-                            <Grid item xs={12} sm={4} md={4} key={item.id}>
-                                <OfficeCard
-                                    buildingName={item.buildingName}
-                                    address={item.address}
-                                    buildingId={item.id}
-                                />
-                            </Grid>
-                        ))
-                    }
-                </Grid>
-            </div>
-        </>
+            {
+                loading ? (
+                    <div style = {{ margin: "2em", width: "100%", display: "flex", justifyContent: "center" }}>
+                        <Typography variant="h5" gutterBottom>
+                            <CircularProgress size={20} color="inherit" /> Loading...
+                        </Typography>
+                    </div>
+                ) : (<>
+                    <Typography variant="h4" gutterBottom>
+                        All Buildings
+                    </Typography>
+                    <div className={classes.root}>
+                        <Grid
+                            container
+                            justifyContent="flex-start"
+                            alignItems="center">
+                            {
+                                buildingList.map((item) => (
+                                    <Grid key={item.buildingId} item xs={12} sm={4} md={4} key={item.buildingId}>
+                                        <OfficeCard
+                                            buildingName={item.buildingName}
+                                            buildingId={item.buildingId}
+                                        />
+                                    </Grid>
+                                ))
+                            }
+                        </Grid>
+                    </div>
+                </>)
+            }</>
     );
 }
 

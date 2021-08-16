@@ -16,7 +16,7 @@ const DateSelector = ({date, setDate}) => {
             <KeyboardDatePicker
                 disableToolbar
                 variant="inline"
-                format="dd/MM/yyyy"
+                format="DD/MM/yyyy"
                 margin="normal"
                 id="date-picker-inline"
                 label="Select Date"
