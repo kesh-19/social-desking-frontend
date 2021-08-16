@@ -54,26 +54,30 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const location = useLocation()
     const checkRoute = () => {
-      console.log('Path:', location.pathname)
+      // console.log('Path:', location.pathname)
       return location.pathname.includes('/index/admin') || location.pathname.includes('/index/bookings')
     }
     const classes = useStyles();
     const [menuOpen, setMenuOpen] = React.useState(null);
+    const [user, setUser] = React.useState({ fName: '', lName: ''});
     let { url } = useRouteMatch();
-    let user = {
-      fname: 'Shreyas',
-      lname: 'Kelshikar'
-    }
+    let localStorage = window.localStorage
+    
     const handleClick = (event) => {
       setMenuOpen(event.currentTarget);
     };
 
     const handleClose = () => {
-      setMenuOpen(null);
+      localStorage.removeItem('user')
+      localStorage.getItem('user')
     };
 
-    localStorage.setItem('userType', 'admin')
-    //localStorage.setItem('userType', 'user')
+    React.useEffect(() => {
+      setUser(JSON.parse(localStorage.getItem('user')))
+    }, [localStorage])
+
+    // localStorage.setItem('userType', 'admin')
+    localStorage.setItem('userType', 'user')
     return ( 
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navbar}>
@@ -89,19 +93,24 @@ const Navbar = () => {
                   <Button className={classes.button}>{ checkRoute() ? 'Go back' : (localStorage.getItem('userType') === 'user' ? 'My bookings' : 'All bookings')}</Button>
                 </Link>
                 
-                <Button size="small" aria-controls="menu" aria-haspopup="true" onClick={handleClick}>
-                  <Avatar variant="rounded" className={classes.avatar}>
-                    {user.fname.substring(0,1)}{user.lname.substring(0,1)}
-                  </Avatar>
-                </Button>
+                {
+                  user &&
+                    <Button size="small" aria-controls="menu" aria-haspopup="true" onClick={handleClick}>
+                      <Avatar variant="rounded" className={classes.avatar}>
+                        {user.fName.substring(0,1)}{user.lName.substring(0,1)}
+                      </Avatar>
+                    </Button>
+                }
                 <Menu
                   id="menu"
                   anchorEl={menuOpen}
                   keepMounted
                   open={Boolean(menuOpen)}
-                  onClose={handleClose}
+                  onClose={() => setMenuOpen(null)}
                 >
-                  <MenuItem disabled>Signed in as<br/>{user.fname} {user.lname}</MenuItem>
+                  {
+                    user && <MenuItem disabled>Signed in as<br/>{user.fName} {user.lName}</MenuItem>
+                  }
                   <Link to="/" className={classes.logoutBox}>
                     <MenuItem onClick={handleClose} className={classes.logout}>Logout</MenuItem>
                   </Link>

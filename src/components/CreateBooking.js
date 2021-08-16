@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import OfficeCard from './OfficeCard';
 import { CircularProgress, Typography } from '@material-ui/core';
 import Config from '../Config';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -11,13 +13,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
 const CreateBooking = () => {
     const classes = useStyles();
 
     const [loading, setLoading] = useState(false);
     const [buildingList, setBuildingList] = useState([]);
-
+    const [openToast, setOpenToast] = React.useState(false);
     
     const getBuildingData = async () => {
         setLoading(true);
@@ -27,8 +28,24 @@ const CreateBooking = () => {
         setLoading(false);
     }
 
+    const handleToastClick = () => {
+        setOpenToast(true);
+    };
+
+    const handleToastClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenToast(false);
+    };
+    function Alert(props) {
+        return <MuiAlert elevation={6} variant="filled" {...props} />;
+      }
+
     useEffect(() => {
         getBuildingData();
+        handleToastClick()
     }, []);
 
     return (
@@ -51,7 +68,7 @@ const CreateBooking = () => {
                             alignItems="center">
                             {
                                 buildingList.map((item) => (
-                                    <Grid key={item.buildingId} item xs={12} sm={4} md={4} key={item.buildingId}>
+                                    <Grid key={item.buildingId} item xs={12} sm={4} md={4}>
                                         <OfficeCard
                                             buildingName={item.buildingName}
                                             buildingId={item.buildingId}
@@ -62,7 +79,14 @@ const CreateBooking = () => {
                         </Grid>
                     </div>
                 </>)
-            }</>
+            }
+            
+            <Snackbar open={openToast} autoHideDuration={4000} onClose={handleToastClose}>
+                <Alert onClose={handleToastClose} severity="success">
+                Signed In as {JSON.parse(window.localStorage.getItem('user')).fName}!
+                </Alert>
+            </Snackbar>
+            </>
     );
 }
 

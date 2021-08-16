@@ -3,34 +3,57 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import logo from '../images/db_logo1.png';
-// import useGlobalStyles from '../styles/global'
 import useLoginStyles from '../styles/loginStyles'
 import LandingPage from './LandingPage';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory } from 'react-router';
+import Config from '../Config'
+import axios from 'axios'
+import ErrorIcon from '@material-ui/icons/Error';
+import Chip from '@material-ui/core/Chip';
+
 
 export default function SignIn() {
     const classes = useLoginStyles();
-    // const globalStyles = useGlobalStyles();
     let history = useHistory()
 
     const initialValues = {
         email: ''
     }
+    const [open, setOpen] = useState(false);
+    const [error, setError] = useState(false);
+    
+
+    if (window.localStorage.getItem('user')) {
+        history.push('/index')
+    }
+
     const onSubmit = (values) => {
         setOpen(true)
         console.log(JSON.stringify(values, null, 2));
 
-        
-        setTimeout(() => {
-            history.push('/index')
-        }, 1000)
+        let user = null
+
+        axios.post(Config.serverUrl + '/desking/signin', values)
+          .then(function (response) {
+              user = response.data
+              
+              if (user) {
+                setError(false)
+                window.localStorage.setItem('user', JSON.stringify(user))
+                history.push('/index')
+              } else {
+                setError("No user found")
+              }
+              setOpen(false)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     }
     const formik = useFormik({initialValues, onSubmit})
-    const [open, setOpen] = useState(false);
-    // const handleClose = () => setOpen(false)
 
   return (
     <LandingPage>
@@ -66,7 +89,17 @@ export default function SignIn() {
             </Button>
             </form>
         { open && <CircularProgress className={classes.progress} />}
+        {
+            error && !open && 
+                <Chip
+                    icon={<ErrorIcon />}
+                    label="User not found!"
+                    color="secondary"
+                    style={{ marginTop: '1rem' }}
+                />
+        }
         </div>
+        {/* user1gmail.com */}
     </LandingPage>
   );
 }
