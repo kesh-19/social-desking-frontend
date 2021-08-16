@@ -103,8 +103,9 @@ const NewBooking = (props) => {
 
     const handleSubmit = async () => {
 
-        if (moment().diff(date, 'days') > 0) {
-            console.log(moment().diff(date, 'days'));
+        const userID = window.localStorage.getItem("userId");
+
+        if (moment().diff(date, 'days') > -1) {
             setIsError(true);
             setError("Date cannot be current date or past date");
             return;
@@ -112,14 +113,24 @@ const NewBooking = (props) => {
             setIsError(true);
             setError("Please Select a seat");
             return;
+        } else if (typeof userID === "undefined") {
+            setIsError(true);
+            setError("User not authenticated >:(");
+            return;
         }
+
         let result = {
             dateOfBooking: date,
             seatID: seatList[selected].seatId,
-            userID: 1
+            userID
         }
-        await axios.post(`${Config.serverUrl}/desking/booking/create`, result);
-        alert("successfull");
+        try {
+            await axios.post(`${Config.serverUrl}/desking/booking/create`, result);
+            history.push("/index/bookings");
+        } catch (err) {
+            setIsError(true);
+            setError("There was an error");
+        }
     }
 
     return (
