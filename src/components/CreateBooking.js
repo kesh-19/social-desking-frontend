@@ -6,6 +6,7 @@ import { CircularProgress, Typography } from '@material-ui/core';
 import Config from '../Config';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Recommendations from './Recommendations';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -58,6 +59,7 @@ const CreateBooking = (props) => {
                         </Typography>
                     </div>
                 ) : (<>
+                    <Recommendations />
                     <Typography variant="h4" gutterBottom>
                         All Buildings
                     </Typography>

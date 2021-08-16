@@ -33,7 +33,7 @@ const NewBooking = (props) => {
     const [floors, setFloors] = useState([]);
     const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState({});
-    const [date, setDate] = useState(new Date('2021-08-18T21:11:54'));
+    const [date, setDate] = useState(new Date());
     const [image, setImage] = useState(null);
     const [seatList, setSeatList] = useState([]);
     const [selected, setSelected] = useState(0);
@@ -53,6 +53,7 @@ const NewBooking = (props) => {
     const handleChange = (event) => {
         setFloor(event.target.value);
     };
+    //console.log(props)
 
     useEffect(() => {
         setLoading(true)
@@ -74,6 +75,11 @@ const NewBooking = (props) => {
                 setFloors(floorBuilder)
                 setLoading(false)
             })
+
+        if (history.location.byRec) {
+            let recommendataionObject = history.location.byRec
+            setFloor(recommendataionObject.floor)
+        }
     }, [props.match.params.id])
 
 
@@ -124,7 +130,7 @@ const NewBooking = (props) => {
             seatID: seatList[selected-1].seatId,
             userID: user.userId
         }
-        console.log(result)
+        //console.log(result)
         try {
             await axios.post(`${Config.serverUrl}/desking/booking/create`, result);
             history.push("/index/bookings");
