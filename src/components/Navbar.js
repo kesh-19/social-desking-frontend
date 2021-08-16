@@ -4,6 +4,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Avatar from '@material-ui/core/Avatar';
 import {
   Link,
   useRouteMatch,
@@ -27,6 +30,24 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     color: 'white'
+  },
+  avatar: {
+    color: "#f5f5f5",
+    backgroundColor: "#0020a9",
+    border: '2px solid white',
+    height: theme.spacing(5),
+    width: theme.spacing(5),
+    margin: theme.spacing(1)
+  },
+  logoutBox: {
+    textDecoration: 'none', 
+  },
+  logout: {
+    color: theme.palette.secondary.main,
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.main,
+      color: 'white'
+    }
   }
 }));
 
@@ -43,7 +64,7 @@ const Navbar = () => {
     localStorage.setItem('userType', 'user')
     return ( 
         <div className={classes.root}>
-            <AppBar position="static" className={classes.navbar}>
+            <AppBar position="fixed" className={classes.navbar}>
                 <Toolbar>
                 <Typography variant="h6" className={classes.title}>
                     <Link to="/index">
@@ -55,9 +76,24 @@ const Navbar = () => {
                 <Link to={ checkRoute() ? '/index' : (localStorage.getItem('userType') === 'user' ? `${url}/bookings` : `${url}/admin`)}>
                   <Button className={classes.button}>{ checkRoute() ? 'Go back' : (localStorage.getItem('userType') === 'user' ? 'My bookings' : 'All bookings')}</Button>
                 </Link>
-                <Link to="/">
-                  <Button className={classes.button}>Logout</Button>
-                </Link>
+                
+                <Button size="small" aria-controls="menu" aria-haspopup="true" onClick={handleClick}>
+                  <Avatar variant="rounded" className={classes.avatar}>
+                    {user.fname.substring(0,1)}{user.lname.substring(0,1)}
+                  </Avatar>
+                </Button>
+                <Menu
+                  id="menu"
+                  anchorEl={menuOpen}
+                  keepMounted
+                  open={Boolean(menuOpen)}
+                  onClose={handleClose}
+                >
+                  <MenuItem disabled>Signed in as<br/>{user.fname} {user.lname}</MenuItem>
+                  <Link to="/" className={classes.logoutBox}>
+                    <MenuItem onClick={handleClose} className={classes.logout}>Logout</MenuItem>
+                  </Link>
+                </Menu>
                 </Toolbar>
             </AppBar>
         </div>

@@ -13,7 +13,7 @@ const Home = () => {
     const mainStyles = useMainStyles();
 
     return ( 
-        <div>
+        <div style={{ marginTop: '4rem' }}>
             <Navbar />
                 <div className={mainStyles.root}>
                     <Switch>
