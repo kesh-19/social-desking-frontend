@@ -104,7 +104,7 @@ const NewBooking = (props) => {
             .then(data => {
                 const seatList = data.filter(item => item.floorNo === floor);
                 setSeatList(seatList);
-                getFloorProgress(data).then((result) => setFloorProgress(result))
+                // getFloorProgress(data).then((result) => setFloorProgress(result))
             });
 
 
@@ -187,7 +187,8 @@ const NewBooking = (props) => {
                         </Box>
                         <Box className={classes.formControlBox}>
                             <Grid container>
-                                <Grid item xs={3}>
+                                {/* <Grid item xs={3}> */}
+                                <Grid item xs={12}>
                                     <FormControl variant="outlined" className={classes.formControl}>
                                         <InputLabel id="demo-simple-select-outlined-label">Floor</InputLabel>
                                         <Select
@@ -205,7 +206,7 @@ const NewBooking = (props) => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
+                                {/* <Grid item xs={6}>
                                     <Box className={classes.progress}>
                                         <LinearProgress
                                             variant="determinate"
@@ -216,7 +217,7 @@ const NewBooking = (props) => {
                                 </Grid>
                                 <Grid item xs={3} className={classes.percentage}>
                                     <p>{floorProgress[floor]}% full</p>
-                                </Grid>
+                                </Grid> */}
                             </Grid>
                         </Box>
                     </Box>
@@ -251,6 +252,9 @@ const NewBooking = (props) => {
                                 variant="outlined"
                                 className={classes.chip}
                             />
+                        </Box>
+                        <Box className={classes.image}>
+                            Scroll to see all Desks.
                         </Box>
                         <SeatGrid seatList={seatList} onDeskClick={onDeskClick} selected={selected} bookedSeats={bookedSeats} />
                     </Box>

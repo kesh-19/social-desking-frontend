@@ -24,12 +24,18 @@ const OfficeCard = ({ buildingName, buildingId }) => {
 
     const classes = useStyles();
     let { url } = useRouteMatch();
+    const [officeImage, setOfficeImage] = React.useState(null)
+
+    React.useEffect(() => {
+        import('../images/' + buildingName + '.PNG')
+        .then((image) => setOfficeImage(image.default))
+    }, [])
 
     return (
         <Card className={classes.root}>
             <CardMedia
                 className={classes.media}
-                image={bg}
+                image={officeImage}
                 title="office"
             />
             <CardContent>
@@ -45,7 +51,7 @@ const OfficeCard = ({ buildingName, buildingId }) => {
                         buildingName
                     }}>
                     <Button variant="contained" size="small" color="primary">
-                        Book a Seat
+                        Book a Desk
                     </Button>
                 </Link>
             </CardActions>
