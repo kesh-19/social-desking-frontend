@@ -34,7 +34,7 @@ const OfficeCard = ({ buildingName, buildingId }) => {
             />
             <CardContent>
                 <Typography variant="h5" gutterBottom>
-                    {buildingName} {buildingId}
+                    {buildingName}
                 </Typography>
             </CardContent>
             <CardActions style={{ padding: "1em" }}>
