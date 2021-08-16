@@ -18,7 +18,7 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorIcon from '@material-ui/icons/Error';
 import SeatGrid from './SeatGrid';
-import Config from '../Config'
+import Config from './Config'
 import { getFloorProgress } from '../functions/helperFunctions';
 import axios from 'axios';
 import moment from 'moment';

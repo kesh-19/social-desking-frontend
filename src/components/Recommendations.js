@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import Config from '../Config';
+import Config from './Config';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import MuiAccordion from '@material-ui/core/Accordion';
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary';

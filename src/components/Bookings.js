@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { Button, CardActions, CardContent, CardMedia, Typography } from '@material-ui/core';
 import bg from '../images/DB2.jpg';
 import BookingCard from './BookingCard';
-import Config from '../Config'
+import Config from './Config'
 
 const useStyles = makeStyles((theme) => ({
     root: {

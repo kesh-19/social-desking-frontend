@@ -9,7 +9,7 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory } from 'react-router';
-import Config from '../Config'
+import Config from './Config'
 import axios from 'axios'
 import ErrorIcon from '@material-ui/icons/Error';
 import Chip from '@material-ui/core/Chip';

@@ -5,7 +5,7 @@ import { DataGrid,
   GridToolbarContainer,
   GridToolbarExport, } from '@material-ui/data-grid';
 
-import Config from '../Config'
+import Config from './Config'
 const useStyles = makeStyles({
   table: {
     minWidth: 650,

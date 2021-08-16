@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import OfficeCard from './OfficeCard';
 import { CircularProgress, Typography } from '@material-ui/core';
-import Config from '../Config';
+import Config from './Config';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Recommendations from './Recommendations';
