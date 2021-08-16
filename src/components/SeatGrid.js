@@ -11,8 +11,6 @@ function SeatGrid({ seatList, onDeskClick, selected, bookedSeats }) {
     const checkIfBooked = (seat) => {        
         const { seatId } = seat;
         const filterSeats = bookedSeats.filter(item => item.seatId === seatId);
-        console.log({filterSeats});
-
         return !!(filterSeats.length >= 1)
     }
 

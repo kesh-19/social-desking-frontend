@@ -47,7 +47,6 @@ const NewBooking = (props) => {
 
 
     const onDeskClick = (deskNumber) => {
-        console.log(seatList[deskNumber].seatId);
         if (!seatList[deskNumber].blocked && deskNumber + 1 !== selected) {
             setSelected(deskNumber + 1);
         } else if (deskNumber + 1 === selected) {
@@ -142,8 +141,7 @@ const NewBooking = (props) => {
             dateOfBooking: date,
             seatID: seatList[selected-1].seatId,
             userID: user.userId
-        }
-        console.log(result)
+        }        
         try {
             await axios.post(`${Config.serverUrl}/desking/booking/create`, result);
             history.push("/index/bookings");
@@ -204,7 +202,7 @@ const NewBooking = (props) => {
                                     <Box className={classes.progress}>
                                         <LinearProgress
                                             variant="determinate"
-                                            value={floorProgress[floor]}
+                                            value={floorProgress[floor] ? floorProgress[floor] : 0}
                                             color={floorProgress > 75 ? 'secondary' : 'primary'}
                                         />
                                     </Box>

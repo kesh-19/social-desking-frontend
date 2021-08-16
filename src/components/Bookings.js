@@ -59,6 +59,7 @@ const Bookings = () => {
                 upcomingBookings.sort((a, b) => {
                     return new Date(a[1].dateOfBooking) - new Date(b[1].dateOfBooking)
                 })
+                console.log(upcomingBookings)
                 setBookings(upcomingBookings)})
     //     setBookings([
     //         [
@@ -109,7 +110,7 @@ const Bookings = () => {
                     bookings.length > 0 ? 
                     
                     bookings.map(booking => (
-                        <Grid item xs={12} sm={6} md={4}>
+                        <Grid key={`${Math.random()}`} item xs={12} sm={6} md={4}>
                             <BookingCard 
                             booking={booking}
                             old = {false}
