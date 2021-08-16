@@ -35,7 +35,7 @@ const Bookings = () => {
     localStorage.setItem('userId', userId)
     let [bookings, setBookings] = useState([])
     let [oldBookings, getOldBookings] = useState([])
-    let [showOldBookings, setOldBookings] = useState(true)
+    let [showOldBookings, setOldBookings] = useState(false)
     
     useEffect(() => {
         
@@ -44,13 +44,17 @@ const Bookings = () => {
             .then(allBookings => {
                 let upcomingBookings = allBookings
                 
-                if(!showOldBookings) {
                     upcomingBookings = allBookings.filter(booking => {
-                        console.log("date:", new Date(booking[1].dateOfBooking) > new Date())
+                        
                         return (new Date(booking[1].dateOfBooking) > new Date())
                     })
-                }
+                
+                let oldBooks = allBookings.filter(booking => {
                     
+                    return (new Date(booking[1].dateOfBooking) < new Date())
+                })
+
+                getOldBookings(oldBooks)
                
                 upcomingBookings.sort((a, b) => {
                     return new Date(a[1].dateOfBooking) - new Date(b[1].dateOfBooking)
@@ -107,6 +111,7 @@ const Bookings = () => {
                         <Grid item xs={12} sm={6} md={4}>
                             <BookingCard 
                             booking={booking}
+                            old = {false}
                             cancelBooking = {cancelBooking}
                             key={booking.userid} />
                         </Grid>
@@ -124,17 +129,20 @@ const Bookings = () => {
                             showOldBookings ? 'Hide Past Bookings' : 'Show Past Bookings'
                         }
                     </Button>
-                    {showOldBookings && 
+                   
+                </div>
+                {showOldBookings && 
                     <Grid
                     container
                     justifyContent="flex-start"
                     alignItems="center">
                 { 
                     
-                    bookings.map(booking => (
+                    oldBookings.map(booking => (
                         <Grid item xs={12} sm={6} md={4}>
                             <BookingCard 
                             booking={booking}
+                            old={true}
                             cancelBooking = {cancelBooking}
                             key={booking.userid} />
                         </Grid>
@@ -142,7 +150,6 @@ const Bookings = () => {
                 }
                 </Grid>
                 }
-                </div>
         </div>
         
     )
