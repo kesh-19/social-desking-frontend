@@ -122,7 +122,7 @@ const NewBooking = (props) => {
 
     const handleSubmit = async () => {
 
-        const userID = window.localStorage.getItem("userId");
+        const user = JSON.parse(window.localStorage.getItem("user"));
 
         if (moment().diff(date, 'days') > -1) {
             setIsError(true);
@@ -132,7 +132,7 @@ const NewBooking = (props) => {
             setIsError(true);
             setError("Please Select a seat");
             return;
-        } else if (typeof userID === "undefined") {
+        } else if (typeof user === "undefined") {
             setIsError(true);
             setError("User not authenticated >:(");
             return;
@@ -140,9 +140,10 @@ const NewBooking = (props) => {
 
         let result = {
             dateOfBooking: date,
-            seatID: seatList[selected].seatId,
-            userID
+            seatID: seatList[selected-1].seatId,
+            userID: user.userId
         }
+        console.log(result)
         try {
             await axios.post(`${Config.serverUrl}/desking/booking/create`, result);
             history.push("/index/bookings");

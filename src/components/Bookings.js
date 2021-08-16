@@ -11,13 +11,19 @@ import Config from '../Config'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        flexGrow: 1,
+        justifyContent: 'center'
     },
     media: {
         height: 140,
     },
     content: {
         padding: "0.5em",
+    },
+    button: {
+        margin: "1em",
+        display: "flex",
+        justifyContent: "center"
     }
 }));
 
@@ -25,17 +31,35 @@ const Bookings = () => {
     
     const classes = useStyles();
     const dataUrl = `${Config.serverUrl}/desking/booking/`
-    const userId = 1
-    localStorage.setItem('userId', userId)
+    const userId = JSON.parse(window.localStorage.getItem('user')).userId
+
     let [bookings, setBookings] = useState([])
+    let [oldBookings, getOldBookings] = useState([])
+    let [showOldBookings, setOldBookings] = useState(false)
     
     useEffect(() => {
         
-        fetch(dataUrl + localStorage.getItem('userId'))
+        fetch(dataUrl + userId)
             .then(res => res.json())
-            .then(data => {
-                console.log("Bookings : ", data)
-                setBookings(data)})
+            .then(allBookings => {
+                let upcomingBookings = allBookings
+                
+                    upcomingBookings = allBookings.filter(booking => {
+                        
+                        return (new Date(booking[1].dateOfBooking) > new Date())
+                    })
+                
+                let oldBooks = allBookings.filter(booking => {
+                    
+                    return (new Date(booking[1].dateOfBooking) < new Date())
+                })
+
+                getOldBookings(oldBooks)
+               
+                upcomingBookings.sort((a, b) => {
+                    return new Date(a[1].dateOfBooking) - new Date(b[1].dateOfBooking)
+                })
+                setBookings(upcomingBookings)})
     //     setBookings([
     //         [
     //             {
@@ -87,12 +111,45 @@ const Bookings = () => {
                         <Grid item xs={12} sm={6} md={4}>
                             <BookingCard 
                             booking={booking}
+                            old = {false}
                             cancelBooking = {cancelBooking}
                             key={booking.userid} />
                         </Grid>
                     ))
                 }
                 </Grid>
+                <div className={classes.button}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => setOldBookings(!showOldBookings)}
+                        >
+                        {
+                            showOldBookings ? 'Hide Past Bookings' : 'Show Past Bookings'
+                        }
+                    </Button>
+                   
+                </div>
+                {showOldBookings && 
+                    <Grid
+                    container
+                    justifyContent="flex-start"
+                    alignItems="center">
+                { 
+                    
+                    oldBookings.map(booking => (
+                        <Grid item xs={12} sm={6} md={4}>
+                            <BookingCard 
+                            booking={booking}
+                            old={true}
+                            cancelBooking = {cancelBooking}
+                            key={booking.userid} />
+                        </Grid>
+                    ))
+                }
+                </Grid>
+                }
         </div>
         
     )
