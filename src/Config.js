@@ -1,5 +1,5 @@
 const Config = {
-    "serverUrl": "http://exp1spring.herokuapp.com"
+    "serverUrl": "https://exp1spring.herokuapp.com"
 }
 
 export default Config;

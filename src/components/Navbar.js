@@ -9,7 +9,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Avatar from '@material-ui/core/Avatar';
 import {
   Link,
-  useRouteMatch
+  useRouteMatch,
+  useLocation
 } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -51,15 +52,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = () => {
+  const location = useLocation()
+    const checkRoute = () => {
+      console.log('Path:', location.pathname)
+      return location.pathname.includes('/index/admin') || location.pathname.includes('/index/bookings')
+    }
     const classes = useStyles();
+    const [menuOpen, setMenuOpen] = React.useState(null);
     let { url } = useRouteMatch();
     let user = {
       fname: 'Shreyas',
       lname: 'Kelshikar'
     }
-
-    const [menuOpen, setMenuOpen] = React.useState(null);
-
     const handleClick = (event) => {
       setMenuOpen(event.currentTarget);
     };
@@ -68,6 +72,8 @@ const Navbar = () => {
       setMenuOpen(null);
     };
 
+    localStorage.setItem('userType', 'admin')
+    //localStorage.setItem('userType', 'user')
     return ( 
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navbar}>
@@ -79,8 +85,8 @@ const Navbar = () => {
                       </div>
                     </Link>
                 </Typography>
-                <Link to={`${url}/bookings`}>
-                  <Button className={classes.button}>My Bookings</Button>
+                <Link to={ checkRoute() ? '/index' : (localStorage.getItem('userType') === 'user' ? `${url}/bookings` : `${url}/admin`)}>
+                  <Button className={classes.button}>{ checkRoute() ? 'Go back' : (localStorage.getItem('userType') === 'user' ? 'My bookings' : 'All bookings')}</Button>
                 </Link>
                 
                 <Button size="small" aria-controls="menu" aria-haspopup="true" onClick={handleClick}>
