@@ -58,10 +58,22 @@ const Navbar = () => {
       return location.pathname.includes('/index/admin') || location.pathname.includes('/index/bookings')
     }
     const classes = useStyles();
-    
+    const [menuOpen, setMenuOpen] = React.useState(null);
     let { url } = useRouteMatch();
+    let user = {
+      fname: 'Shreyas',
+      lname: 'Kelshikar'
+    }
+    const handleClick = (event) => {
+      setMenuOpen(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setMenuOpen(null);
+    };
+
     localStorage.setItem('userType', 'admin')
-    localStorage.setItem('userType', 'user')
+    //localStorage.setItem('userType', 'user')
     return ( 
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navbar}>

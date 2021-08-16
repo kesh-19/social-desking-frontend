@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import { Button, CardActions, CardContent, CardMedia, Typography } from '@material-ui/core';
 import bg from '../images/DB2.jpg';
 import BookingCard from './BookingCard';
+import Config from '../Config'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -23,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
 const Bookings = () => {
     
     const classes = useStyles();
-    const dataUrl = 'https://exp1spring.herokuapp.com/desking/'
+    const dataUrl = `${Config.serverUrl}/desking/booking/`
     const userId = 1
     localStorage.setItem('userId', userId)
     let [bookings, setBookings] = useState([])
     
     useEffect(() => {
         
-        fetch(dataUrl + 'booking/' + localStorage.getItem('userId'))
+        fetch(dataUrl + localStorage.getItem('userId'))
             .then(res => res.json())
             .then(data => {
                 console.log("Bookings : ", data)
@@ -63,7 +64,7 @@ const Bookings = () => {
      }, [])
 
     const cancelBooking = (bookingId) => {
-        axios.delete(dataUrl + 'booking/' + bookingId)
+        axios.delete(dataUrl + bookingId)
             .then(res => {
                 console.log(res)
                 console.log(res.data)
