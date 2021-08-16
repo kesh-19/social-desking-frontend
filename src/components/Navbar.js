@@ -82,6 +82,8 @@ const Navbar = () => {
           return 'user'
       else if(userType === 'developer' || userType === 'Developer')
           return 'developer'
+      else
+        return 'user'
     }
     return ( 
         <div className={classes.root}>
