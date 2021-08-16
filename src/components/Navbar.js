@@ -54,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const location = useLocation()
     const checkRoute = () => {
-      // console.log('Path:', location.pathname)
       return location.pathname.includes('/index/admin') || location.pathname.includes('/index/bookings')
     }
     const classes = useStyles();
@@ -76,7 +75,14 @@ const Navbar = () => {
       setUser(JSON.parse(localStorage.getItem('user')))
     }, [localStorage])
 
-    
+    const checkUserType = () => {
+      if(userType === 'admin' || userType === 'Admin')
+          return 'admin'
+      else if(userType === 'user' || userType === 'User')
+          return 'user'
+      else if(userType === 'developer' || userType === 'Developer')
+          return 'developer'
+    }
     return ( 
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navbar}>
@@ -88,8 +94,8 @@ const Navbar = () => {
                       </div>
                     </Link>
                 </Typography>
-                <Link to={ checkRoute() ? '/index' : (userType === 'user' ? `${url}/bookings` : `${url}/admin`)}>
-                  <Button className={classes.button}>{ checkRoute() ? 'Go back' : (userType === 'user' ? 'My bookings' : 'All bookings')}</Button>
+                <Link to={ checkRoute() ? '/index' : (checkUserType() === 'admin' ? `${url}/admin` : `${url}/bookings`)}>
+                  <Button className={classes.button}>{ checkRoute() ? 'Go back' : (checkUserType() === 'admin' ? 'All bookings' : 'My bookings')}</Button>
                 </Link>
                 
                 {
