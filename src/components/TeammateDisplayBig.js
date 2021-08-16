@@ -52,10 +52,10 @@ const TeammateDisplayBig = ({teammate}) => {
                 <TableHead>
                 <TableRow>
                     <TableCell>Teammate</TableCell>
-                    <TableCell>Booking</TableCell>
                     <TableCell>Building</TableCell>
                     <TableCell>Floor</TableCell>
                     <TableCell>Desk</TableCell>
+                    <TableCell>Booking</TableCell>
                 </TableRow>
                 </TableHead>
                 <TableBody>

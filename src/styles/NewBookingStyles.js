@@ -13,7 +13,7 @@ const useNewBookingStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         fontSize: '13px',
-        color: '#d9b386'
+        color: '#8198fe'
     },
     listChip: {
         display: 'flex',

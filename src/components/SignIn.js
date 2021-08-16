@@ -102,8 +102,8 @@ export default function SignIn() {
                 />
         }
         </div>
-        user1gmail.com
-        shreyas@gmail.com
+        {/* user1gmail.com
+        shreyas@gmail.com */}
     </LandingPage>
   );
 }

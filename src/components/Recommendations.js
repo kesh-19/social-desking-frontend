@@ -16,7 +16,7 @@ import { Hidden } from '@material-ui/core';
 const useStyles = makeStyles((theme) => ({
     root: {
       width: '100%',
-      marginBottom: '10px'
+      marginBottom: '15px'
     },
     heading: {
       fontSize: theme.typography.pxToRem(15),
@@ -74,7 +74,7 @@ const Recommendations = () => {
     const classes = useStyles();
 
     React.useEffect(() => {
-        let today = new Date("2022-07-31");
+        let today = new Date();
         let dd, mm, yyyy = null
         
         let i = 1
@@ -100,6 +100,7 @@ const Recommendations = () => {
                         recs[date[date.length-1]] = data.data
                         if (Object.keys(recs).length === 7) setRecommendations(recs)
                     })
+                    .catch((error) => console.log(error))
                 } 
             }        
     }, [])

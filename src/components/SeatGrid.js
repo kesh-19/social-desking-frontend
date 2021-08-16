@@ -26,7 +26,10 @@ function SeatGrid({ seatList, onDeskClick, selected, bookedSeats }) {
             display: "flex",
             justifyContent: "space-evenly",
             alignItems: "center",
-            flexWrap: "wrap"
+            flexWrap: "wrap",
+            maxHeight: '17rem',
+            overflowY: 'scroll',
+            scrollbarWidth: 'thin'
         }}>
 
             {
