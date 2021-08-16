@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core'
 import { DataGrid, 
   GridToolbarContainer,
   GridToolbarExport, } from '@material-ui/data-grid';
@@ -53,6 +54,24 @@ const columns = [
     width: 160,
     
   },
+  {
+    field: 'email',
+    headerName: 'Contact',
+    width: 160,
+    renderCell: (params ) => (
+      <a href="mailto:hello@gmail.com">
+      <Button
+      variant="contained"
+          color="primary"
+          size="small"
+          >
+        Contact user
+      </Button>
+      </a>
+        
+    )
+    
+  },
 ];
 
 const AdminBookings = () => {
@@ -62,7 +81,7 @@ const AdminBookings = () => {
     <GridToolbarExport />
   </GridToolbarContainer>)
   }
-  const classes = useStyles();
+  
   const dataUrl = `${Config.serverUrl}/desking/booking/alldetails`
   const [allBookings, setAllBookings] = useState([])
 
@@ -72,7 +91,7 @@ const AdminBookings = () => {
       .then(data => {
         console.log("Allbookings: ", data)
         const rows = data.map((booking) => {
-          return createData(booking[0], booking[3], booking[5], booking[7], booking[6], booking[4])
+          return createData(booking[0], booking[3], booking[5], booking[7], booking[6], new Date(booking[4]).toDateString())
         })
         setAllBookings(rows)
       })

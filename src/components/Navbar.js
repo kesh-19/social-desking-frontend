@@ -73,7 +73,7 @@ const Navbar = () => {
     };
 
     localStorage.setItem('userType', 'admin')
-    //localStorage.setItem('userType', 'user')
+    localStorage.setItem('userType', 'user')
     return ( 
         <div className={classes.root}>
             <AppBar position="fixed" className={classes.navbar}>
