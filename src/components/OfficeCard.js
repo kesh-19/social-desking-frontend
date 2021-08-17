@@ -24,11 +24,18 @@ const OfficeCard = ({ buildingName, buildingId }) => {
 
     const classes = useStyles();
     let { url } = useRouteMatch();
-    const [officeImage, setOfficeImage] = React.useState(null)
+    const [officeImage, setOfficeImage] = React.useState(bg)
 
     React.useEffect(() => {
+       
         import('../images/' + buildingName + '.PNG')
         .then((image) => setOfficeImage(image.default))
+        .catch((image) => {
+            import('../images/Magarpatta.PNG')
+            .then((image) => setOfficeImage(image.default))
+        })
+        
+        
     }, [])
 
     return (
