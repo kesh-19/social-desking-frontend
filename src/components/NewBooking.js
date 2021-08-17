@@ -1,5 +1,5 @@
 import Grid from '@material-ui/core/Grid';
-import { Typography, Box, Modal } from '@material-ui/core';
+import { Typography, Box, Modal, LinearProgress } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -33,7 +33,8 @@ const NewBooking = (props) => {
     const [building, setBuilding] = useState({});
     const [date, setDate] = useState(new Date());
     const [image, setImage] = useState(null);
-    // const [floorProgress, setFloorProgress] = useState(0);
+    const [bookableSeatsByFloor, setBookableSeatsByFloor] = useState({});
+    const [floorProgress, setFloorProgress] = useState(0);
 
     const [seatList, setSeatList] = useState([]);
     const [bookedSeats, setBookedSeats] = useState([]);
@@ -115,6 +116,16 @@ const NewBooking = (props) => {
         setLoading(true)
         let buildingId = parseInt(props.match.params.id);
 
+        let floorId = floor
+        if (floor > 3)
+            floorId = floor % 3
+        if (floorId === 0)
+            floorId = 3
+
+        import('../images/floor' + floorId + '.jpg').then(image => {
+            setImage(image.default)
+        })
+
         fetch(Config.serverUrl + '/desking/buildings/')
             .then(res => res.json())
             .then(data => {
@@ -132,35 +143,30 @@ const NewBooking = (props) => {
                 setLoading(false)
             })
 
+        let bookableSeatsByFloor = {}
+        fetch(`${Config.serverUrl}/desking/buildings/${parseInt(props.match.params.id)}`)
+            .then(res => res.json())
+            .then(data => {
+                const seatList = data.filter(item => {
+                    if (Object.keys(bookableSeatsByFloor).includes(item['floorNo'].toString())) {
+                        if (!item.blocked) bookableSeatsByFloor[item.floorNo] += 1
+                        
+                    } else {
+                        if (!item.blocked) bookableSeatsByFloor[item.floorNo] = 1
+                        else bookableSeatsByFloor[item.floorNo] = 0
+                    }
+                    
+                    return item.floorNo === floor
+                });
+                setSeatList(seatList);
+                setBookableSeatsByFloor(bookableSeatsByFloor)
+                // getFloorProgress(data).then((result) => setFloorProgress(result))
+            });
+
         if (history.location.byRec) {
             let recommendataionObject = history.location.byRec
             setFloor(recommendataionObject.floor)
         }
-    }, [props.match.params.id])
-
-
-    useEffect(() => {
-
-        let floorId = floor
-        if (floor > 3)
-            floorId = floor % 3
-        if (floorId === 0)
-            floorId = 3
-
-        import('../images/floor' + floorId + '.jpg').then(image => {
-            setImage(image.default)
-        })
-
-        fetch(`${Config.serverUrl}/desking/buildings/${parseInt(props.match.params.id)}`)
-            .then(res => res.json())
-            .then(data => {
-                const seatList = data.filter(item => item.floorNo === floor);
-                setSeatList(seatList);
-                // getFloorProgress(data).then((result) => setFloorProgress(result))
-            });
-
-
-
     }, [floor, props.match.params.id])
 
     useEffect(() => {
@@ -173,7 +179,20 @@ const NewBooking = (props) => {
                 const resSeats = data.filter((item) => item && item.floorNo === floor && item.buildingId === buildingId);
                 setBookedSeats(resSeats);
             });
+
+            
     }, [date, props.match.params.id, floor])
+
+    useEffect(() => {
+        if (Object.keys(bookableSeatsByFloor).includes(floor.toString())) {
+            let reservedSeats = bookedSeats.length
+            let totalAvailableSeats = bookableSeatsByFloor[floor]
+            setFloorProgress(Math.round((reservedSeats/totalAvailableSeats)*100))
+        }
+        else {
+            setFloorProgress(0)
+        }
+    }, [bookedSeats])
 
 
 
@@ -239,8 +258,8 @@ const NewBooking = (props) => {
                         </Box>
                         <Box className={classes.formControlBox}>
                             <Grid container>
-                                {/* <Grid item xs={3}> */}
-                                <Grid item xs={12}>
+                                <Grid item xs={3}>
+                                {/* <Grid item xs={12}> */}
                                     <FormControl variant="outlined" className={classes.formControl}>
                                         <InputLabel id="demo-simple-select-outlined-label">Floor</InputLabel>
                                         <Select
@@ -258,18 +277,18 @@ const NewBooking = (props) => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                {/* <Grid item xs={6}>
+                                <Grid item xs={6}>
                                     <Box className={classes.progress}>
                                         <LinearProgress
                                             variant="determinate"
-                                            value={floorProgress[floor] ? floorProgress[floor] : 0}
+                                            value={floorProgress}
                                             color={floorProgress > 75 ? 'secondary' : 'primary'}
                                         />
                                     </Box>
                                 </Grid>
                                 <Grid item xs={3} className={classes.percentage}>
-                                    <p>{floorProgress[floor]}% full</p>
-                                </Grid> */}
+                                    <p>{floorProgress}% full</p>
+                                </Grid>
                             </Grid>
                         </Box>
                     </Box>

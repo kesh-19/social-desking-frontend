@@ -59,7 +59,6 @@ const Bookings = () => {
                 upcomingBookings.sort((a, b) => {
                     return new Date(a[1].dateOfBooking) - new Date(b[1].dateOfBooking)
                 })
-                console.log(upcomingBookings)
                 setBookings(upcomingBookings)})
     //     setBookings([
     //         [
