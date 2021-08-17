@@ -12,8 +12,8 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(id, bookingid, seatid, buildingid, floorno, dob) {
-  return { id, bookingid, seatid, buildingid, floorno, dob };
+function createData(id, bookingid, seatid, buildingid, floorno, dob, email) {
+  return { id, bookingid, seatid, buildingid, floorno, dob, email };
 }
 
 
@@ -59,11 +59,13 @@ const columns = [
     headerName: 'Contact',
     width: 160,
     renderCell: (params ) => (
-      <a href="mailto:hello@gmail.com">
+      <a style={{textDecoration: 'none'}} 
+        href={`mailto:${params.value}`}>
       <Button
       variant="contained"
           color="primary"
           size="small"
+          
           >
         Contact user
       </Button>
@@ -91,7 +93,7 @@ const AdminBookings = () => {
       .then(data => {
         console.log("Allbookings: ", data)
         const rows = data.map((booking) => {
-          return createData(booking[0], booking[3], booking[5], booking[7], booking[6], new Date(booking[4]).toDateString())
+          return createData(booking[0], booking[4], booking[6], booking[8], booking[7], new Date(booking[5]).toDateString(), booking[3])
         })
         setAllBookings(rows)
       })
