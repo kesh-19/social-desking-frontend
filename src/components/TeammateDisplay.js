@@ -28,7 +28,7 @@ const createData = (name, building, floor, desk, buildingId) => {
 
 
 
-const TeammateDisplay = ({teammate}) => {
+const TeammateDisplay = ({date,teammate}) => {
     const classes = useStyles();
     let history = useHistory()
 
@@ -43,7 +43,8 @@ const TeammateDisplay = ({teammate}) => {
             byRec: {
                 buildingId,
                 floor,
-                desk
+                desk,
+                date
             }
         })
     }

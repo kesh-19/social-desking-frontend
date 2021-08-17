@@ -28,7 +28,7 @@ const createData = (name, building, floor, desk, buildingId) => {
     return { name, building, floor, desk, buildingId };
 }
 
-const TeammateDisplayBig = ({teammate}) => {
+const TeammateDisplayBig = ({date,teammate}) => {
     let history = useHistory()
     const rows = [];
     teammate.forEach(item => {
@@ -41,7 +41,8 @@ const TeammateDisplayBig = ({teammate}) => {
             byRec: {
                 buildingId,
                 floor,
-                desk
+                desk,
+                date
             }
         })
     }

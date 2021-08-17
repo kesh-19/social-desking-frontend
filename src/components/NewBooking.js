@@ -166,6 +166,7 @@ const NewBooking = (props) => {
         if (history.location.byRec) {
             let recommendataionObject = history.location.byRec
             setFloor(recommendataionObject.floor)
+            setDate(new Date(recommendataionObject.date))
         }
     }, [floor, props.match.params.id])
 

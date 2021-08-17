@@ -144,7 +144,7 @@ const Recommendations = () => {
                                                                 {key}
                                                             </AccordionSummary>
                                                             <AccordionDetails>
-                                                                <TeammateDisplayBig teammate={[...obj]} />
+                                                                <TeammateDisplayBig date={key} teammate={[...obj]} />
                                                             </AccordionDetails>
                                                         </Accordion>
                                                 }
@@ -161,7 +161,7 @@ const Recommendations = () => {
                                                                 {key}
                                                             </AccordionSummary>
                                                             <AccordionDetails>
-                                                                <TeammateDisplay teammate={[...obj]} />
+                                                                <TeammateDisplay date={key} teammate={[...obj]} />
                                                             </AccordionDetails>
                                                         </Accordion>
                                                 }
