@@ -1,5 +1,5 @@
 import Grid from '@material-ui/core/Grid';
-import { Typography, Box } from '@material-ui/core';
+import { Typography, Box, Modal } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,7 +11,6 @@ import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 import Divider from '@material-ui/core/Divider';
 import DateSelector from './DateSelector';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import useNewBookingStyles from '../styles/NewBookingStyles';
 import Button from '@material-ui/core/Button';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
@@ -19,7 +18,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorIcon from '@material-ui/icons/Error';
 import SeatGrid from './SeatGrid';
 import Config from './Config'
-import { getFloorProgress } from '../functions/helperFunctions';
 import axios from 'axios';
 import moment from 'moment';
 import { useHistory } from 'react-router-dom';
@@ -35,7 +33,7 @@ const NewBooking = (props) => {
     const [building, setBuilding] = useState({});
     const [date, setDate] = useState(new Date());
     const [image, setImage] = useState(null);
-    const [floorProgress, setFloorProgress] = useState(0);
+    // const [floorProgress, setFloorProgress] = useState(0);
 
     const [seatList, setSeatList] = useState([]);
     const [bookedSeats, setBookedSeats] = useState([]);
@@ -44,7 +42,51 @@ const NewBooking = (props) => {
     const [error, setError] = useState("");
     const [isError, setIsError] = useState(false);
 
+    const [user, setUser] = useState();
+    const [open, setOpen] = useState(false);
 
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const updateSeatBlockedStatus = async () => {
+        const newSeatList = [...seatList];
+        await axios.put(`${Config.serverUrl}/desking/seat/block/${seatList[selected - 1].seatId}`);
+        newSeatList.map((item) => {
+            if (item.seatId === newSeatList[selected - 1].seatId) {
+                return {
+                    ...item,
+                    blocked: !item.blocked
+                }
+            } else {
+                return item;
+            }
+        });
+        setSeatList(newSeatList);
+        setSelected(0);
+        handleClose();
+        history.go(0);
+    }
+
+    const body = (
+        <div className={classes.modal}>
+            <h2 id="simple-modal-title" style={{ textAlign: "center" }}>Do you want to modify seat?</h2>
+            <p style={{ textAlign: "center" }}>Seat status will change from blocked to unblocked and vice versa</p>
+            <br />
+            <div style={{
+                display: "flex",
+                justifyContent: "center"
+            }}>
+                <Button variant="contained" color="primary" onClick={updateSeatBlockedStatus} style={{ marginRight: "1em" }}>Yes</Button>
+                <Button variant="contained" color="secondary" onClick={handleClose}>No</Button>
+            </div>
+
+        </div>
+    );
 
     const onDeskClick = (deskNumber) => {
         if (!seatList[deskNumber].blocked && deskNumber + 1 !== selected) {
@@ -52,12 +94,22 @@ const NewBooking = (props) => {
         } else if (deskNumber + 1 === selected) {
             setSelected(0);
         }
+        if (user.role === "admin" || user.role === "Admin") {
+            if (seatList[deskNumber].blocked) {
+                setSelected(deskNumber + 1);
+            }
+            handleOpen();
+        }
     }
 
     const handleChange = (event) => {
         setFloor(event.target.value);
     };
     //console.log(props)
+
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem('user')));
+    }, []);
 
     useEffect(() => {
         setLoading(true)
@@ -111,13 +163,13 @@ const NewBooking = (props) => {
 
     }, [floor, props.match.params.id])
 
-    useEffect(() => {        
+    useEffect(() => {
         setSelected(0);
         let buildingId = parseInt(props.match.params.id);
         const strDate = moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD');
         fetch(`${Config.serverUrl}/desking/seatsbooked/${strDate}`)
             .then(res => res.json())
-            .then(data => {      
+            .then(data => {
                 const resSeats = data.filter((item) => item && item.floorNo === floor && item.buildingId === buildingId);
                 setBookedSeats(resSeats);
             });
@@ -145,7 +197,7 @@ const NewBooking = (props) => {
 
         let result = {
             dateOfBooking: date,
-            seatID: seatList[selected-1].seatId,
+            seatID: seatList[selected - 1].seatId,
             userID: user.userId
         }
         //console.log(result)
@@ -309,7 +361,7 @@ const NewBooking = (props) => {
                                     variant="contained"
                                     className={classes.confirmButton}
                                     onClick={handleSubmit}
-                                    disabled={!building}
+                                    disabled={typeof user !== "undefined" && (user.role === "Admin" || user.role === "admin")}
                                 >
                                     <CheckCircleOutlineIcon /> &nbsp;
                                     Confirm Booking
@@ -331,10 +383,20 @@ const NewBooking = (props) => {
                                     />
                                 }
                             </Box>
+
+
                         </Box>
                     </Grid>
                 }
             </Grid>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                {body}
+            </Modal>
         </div>
     );
 }
